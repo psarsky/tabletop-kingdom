@@ -35,7 +35,7 @@ const addOrder = async (req, res) => {
 		return res.status(201).json({ orderId: order.id });
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while creating an order: ${error.message}`,
+			error: `An unexpected error occurred while creating an order: ${error.message}`,
 		});
 	}
 };
@@ -44,8 +44,7 @@ const updateOrder = async (req, res) => {
 	try {
 		const order = await Order.findByPk(req.params.id);
 		if (!order) return res.status(404).send("Order not found");
-		if (order.userId !== req.user.id)
-			return res.status(403).send("Forbidden");
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const items = req.body;
 		if (!items || !Array.isArray(items) || items.length === 0) {
 			return res.status(400).send("No fields to update");
@@ -93,7 +92,7 @@ const updateOrder = async (req, res) => {
 		return res.status(200).send("Order updated");
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while updating an order: ${error.message}`,
+			error: `An unexpected error occurred while updating an order: ${error.message}`,
 		});
 	}
 };
@@ -102,8 +101,7 @@ const deleteOrder = async (req, res) => {
 	try {
 		const order = await Order.findByPk(req.params.id);
 		if (!order) return res.status(404).send("Order not found");
-		if (order.userId !== req.user.id)
-			return res.status(403).send("Forbidden");
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		await order.destroy();
 		await database.query("DELETE FROM sqlite_sequence WHERE name='Orders'");
 		await database.query(
@@ -112,7 +110,7 @@ const deleteOrder = async (req, res) => {
 		return res.status(200).send("Order deleted");
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while deleting an order: ${error.message}`,
+			error: `An unexpected error occurred while deleting an order: ${error.message}`,
 		});
 	}
 };
@@ -128,17 +126,19 @@ const getOrderById = async (req, res) => {
 			],
 		});
 		if (!order) return res.status(404).send("Order not found");
+		if (req.user.role !== "admin" && order.userId != req.user.id)
+			return res.status(403).send("Forbidden");
 		return res.status(200).json(order);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while searching for an order: ${error.message}`,
+			error: `An unexpected error occurred while searching for an order: ${error.message}`,
 		});
 	}
 };
 
 const getUserOrders = async (req, res) => {
 	try {
-		if (req.params.userId != req.user.id)
+		if (req.user.role !== "admin" && req.params.userId != req.user.id)
 			return res.status(403).send("Forbidden");
 		const orders = await Order.findAll({
 			where: { userId: req.params.userId },
@@ -154,13 +154,14 @@ const getUserOrders = async (req, res) => {
 		return res.status(200).json(orders);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while searching for orders: ${error.message}`,
+			error: `An unexpected error occurred while searching for orders: ${error.message}`,
 		});
 	}
 };
 
-const getOrders = async (_, res) => {
+const getOrders = async (req, res) => {
 	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const orders = await Order.findAll({
 			include: [
 				{
@@ -172,13 +173,14 @@ const getOrders = async (_, res) => {
 		return res.status(200).json(orders);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while searching for orders: ${error.message}`,
+			error: `An unexpected error occurred while searching for orders: ${error.message}`,
 		});
 	}
 };
 
-const fillDatabase = async (_, res) => {
+const fillDatabase = async (req, res) => {
 	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const response = await fetch("https://dummyjson.com/carts?limit=0");
 		const data = await response.json();
 		for (const cart of data.carts) {

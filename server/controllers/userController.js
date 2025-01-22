@@ -16,7 +16,6 @@ const register = async (req, res) => {
 			postalCode,
 			city,
 			phone,
-			role,
 		} = req.body;
 		if (
 			!username ||
@@ -71,8 +70,6 @@ const register = async (req, res) => {
 				}
 			}
 		}
-		if (role && role !== "admin" && role !== "user")
-			return res.status(400).send("Invalid role");
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const user = await User.create({
 			username,
@@ -84,12 +81,11 @@ const register = async (req, res) => {
 			postalCode,
 			city,
 			phone,
-			role,
 		});
 		return res.status(201).json({ id: user.id });
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred during registration: ${error.message}`,
+			error: `An unexpected error occurred during registration: ${error.message}`,
 		});
 	}
 };
@@ -115,13 +111,15 @@ const login = async (req, res) => {
 		return res.status(200).json({ token });
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred during login: ${error.message}`,
+			error: `An unexpected error occurred during login: ${error.message}`,
 		});
 	}
 };
 
 const updateUser = async (req, res) => {
 	try {
+		if (req.user.role !== "admin" && req.params.id != req.user.id)
+			return res.status(403).send("Forbidden");
 		const user = await User.findByPk(req.params.id);
 		if (!user) return res.status(404).send("User not found");
 		const {
@@ -164,13 +162,15 @@ const updateUser = async (req, res) => {
 		return res.status(200).send("User updated");
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while updating a user: ${error.message}`,
+			error: `An unexpected error occurred while updating a user: ${error.message}`,
 		});
 	}
 };
 
 const deleteUser = async (req, res) => {
 	try {
+		if (req.user.role !== "admin" && req.params.id != req.user.id)
+			return res.status(403).send("Forbidden");
 		const user = await User.findByPk(req.params.id);
 		if (!user) return res.status(404).send("User not found");
 		await user.destroy();
@@ -178,30 +178,33 @@ const deleteUser = async (req, res) => {
 		return res.status(200).send("User deleted");
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while deleting a user: ${error.message}`,
+			error: `An unexpected error occurred while deleting a user: ${error.message}`,
 		});
 	}
 };
 
 const getUserById = async (req, res) => {
 	try {
+		if (req.user.role !== "admin" && req.params.id != req.user.id)
+			return res.status(403).send("Forbidden");
 		const user = await User.findByPk(req.params.id);
 		if (!user) return res.status(404).send("User not found");
 		return res.status(200).json(user);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while searching for a user: ${error.message}`,
+			error: `An unexpected error occurred while searching for a user: ${error.message}`,
 		});
 	}
 };
 
-const getUsers = async (_, res) => {
+const getUsers = async (req, res) => {
 	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const users = await User.findAll();
 		return res.status(200).json(users);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while searching for users: ${error.message}`,
+			error: `An unexpected error occurred while searching for users: ${error.message}`,
 		});
 	}
 };

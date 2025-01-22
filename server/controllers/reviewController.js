@@ -27,7 +27,7 @@ const addReview = async (req, res) => {
 		return res.status(201).json({ id: review.id });
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while adding a review: ${error.message}`,
+			error: `An unexpected error occurred while adding a review: ${error.message}`,
 		});
 	}
 };
@@ -36,7 +36,7 @@ const deleteReview = async (req, res) => {
 	try {
 		const review = await Review.findByPk(req.params.id);
 		if (!review) return res.status(404).json({ error: "Review not found" });
-		if (review.userId !== req.user.id)
+		if (req.user.role !== "admin" && review.userId != req.user.id)
 			return res.status(403).send("Forbidden");
 		await review.destroy();
 		await database.query(
@@ -60,13 +60,15 @@ const deleteReview = async (req, res) => {
 		return res.status(200).send("Review deleted");
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while deleting a review: ${error.message}`,
+			error: `An unexpected error occurred while deleting a review: ${error.message}`,
 		});
 	}
 };
 
 const getReviewsByProductId = async (req, res) => {
 	try {
+		if (req.user.role !== "admin" && req.params.id != req.user.id)
+			return res.status(403).send("Forbidden");
 		const reviews = await Review.findAll({
 			where: { productId: req.params.id },
 		});
@@ -75,14 +77,14 @@ const getReviewsByProductId = async (req, res) => {
 		return res.status(200).json(reviews);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while getting reviews: ${error.message}`,
+			error: `An unexpected error occurred while getting reviews: ${error.message}`,
 		});
 	}
 };
 
 const getReviewsByUserId = async (req, res) => {
 	try {
-		if (req.params.userId != req.user.id)
+		if (req.user.role !== "admin" && req.params.userId != req.user.id)
 			return res.status(403).send("Forbidden");
 		const reviews = await Review.findAll({
 			where: { userId: req.params.userId },
@@ -92,26 +94,28 @@ const getReviewsByUserId = async (req, res) => {
 		return res.status(200).json(reviews);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while getting reviews: ${error.message}`,
+			error: `An unexpected error occurred while getting reviews: ${error.message}`,
 		});
 	}
 };
 
-const getReviews = async (_, res) => {
+const getReviews = async (req, res) => {
 	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const reviews = await Review.findAll();
 		if (!reviews)
 			return res.status(404).json({ error: "Reviews not found" });
 		return res.status(200).json(reviews);
 	} catch (error) {
 		return res.status(500).json({
-			error: `An error occurred while getting reviews: ${error.message}`,
+			error: `An unexpected error occurred while getting reviews: ${error.message}`,
 		});
 	}
 };
 
-const fillDatabase = async (_, res) => {
+const fillDatabase = async (req, res) => {
 	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const response = await fetch("https://dummyjson.com/products?limit=0");
 		const data = await response.json();
 		const toAdd = [];

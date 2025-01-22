@@ -17,13 +17,13 @@ import {
 
 const router = express.Router();
 
-router.route("/").post(addProduct).get(getProducts);
+router.route("/").post(authToken, addProduct).get(getProducts);
 
 router
 	.route("/id/:id")
-	.patch(updateProduct)
-	.delete(deleteProduct)
-    .get(getProductById);
+	.patch(authToken, updateProduct)
+	.delete(authToken, deleteProduct)
+	.get(getProductById);
 
 router
 	.route("/id/:id/reviews")
@@ -32,6 +32,6 @@ router
 
 router.route("/categories").get(getCategories);
 
-router.route("/fillDatabase").get(fillDatabase);
+router.route("/fillDatabase").get(authToken, fillDatabase);
 
 export default router;
