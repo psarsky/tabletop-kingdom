@@ -13,7 +13,7 @@ import {
 
 const router = express.Router();
 
-router.route("/").post(authToken, addOrder).get(getOrders);
+router.route("/").post(authToken, addOrder).get(authToken, getOrders);
 
 router.route("/user/:userId").get(authToken, getUserOrders);
 
@@ -21,8 +21,8 @@ router
 	.route("/id/:id")
 	.patch(authToken, updateOrder)
 	.delete(authToken, deleteOrder)
-	.get(getOrderById);
+	.get(authToken, getOrderById);
 
-router.route("/fillDatabase").get(fillDatabase);
+router.route("/fillDatabase").get(authToken, fillDatabase);
 
 export default router;
