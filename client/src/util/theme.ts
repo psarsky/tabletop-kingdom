@@ -1,21 +1,35 @@
-import { createTheme } from "@mui/material";
+import { createTheme, Theme, ThemeOptions } from "@mui/material";
 
-const theme = createTheme({
+const themeOptions: ThemeOptions = {
 	palette: {
 		primary: {
-			main: "#844546",
+			main: "#181C14",
 		},
 		secondary: {
-			main: "#458483",
+			main: "#3C3D37",
+		},
+		background: {
+			default: "#697565",
+		},
+		text: {
+			primary: "#ECDFCC",
 		},
 	},
 	typography: {
-		fontFamily: ["Roboto", "serif"].join(","),
-		h1: {
-			fontSize: "3rem",
-			fontWeight: 600,
+		fontFamily: '"Uncial Antiqua", "serif"',
+	},
+	components: {
+		MuiButton: {
+			defaultProps: {
+				variant: "contained",
+				color: "primary",
+				disableElevation: true,
+				disableRipple: true,
+			},
 		},
 	},
-});
+};
 
-export { theme };
+const theme: Theme = createTheme(themeOptions);
+
+export default theme;

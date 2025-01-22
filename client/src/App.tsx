@@ -10,7 +10,7 @@ import Orders from "./pages/Orders.tsx";
 import User from "./pages/User.tsx";
 import NoPage from "./pages/NoPage.tsx";
 
-function App() {
+function App(): JSX.Element {
 	return (
 		<BrowserRouter>
 			<Routes>

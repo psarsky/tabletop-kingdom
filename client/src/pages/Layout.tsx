@@ -1,17 +1,19 @@
-import { Container } from "@mui/material";
-
+import { useEffect, Fragment } from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../components/Header.tsx";
-import Footer from "../components/Footer.tsx";
 
-const Layout = () => {
+import Header from "../components/layout/header/Header";
+
+function Layout(): JSX.Element {
+	useEffect(() => {
+		document.title = "Tabletop Kingdom";
+	}, []);
+
 	return (
-		<Container sx={{ minHeight: "100vh", overflow: "auto" }}>
+		<Fragment>
 			<Header />
-			<Outlet />
-			<Footer />
-		</Container>
+            <Outlet />
+		</Fragment>
 	);
-};
+}
 
 export default Layout;
