@@ -1,5 +1,7 @@
 import express from "express";
 
+import { authToken } from "../middleware/auth.js";
+
 import {
 	register,
 	login,
@@ -16,9 +18,13 @@ router.route("/register").post(register);
 
 router.route("/login").post(login);
 
-router.route("/id/:id").patch(updateUser).delete(deleteUser).get(getUserById);
+router
+	.route("/id/:id")
+	.patch(authToken, updateUser)
+	.delete(authToken, deleteUser)
+	.get(authToken, getUserById);
 
-router.route("/").get(getUsers);
+router.route("/").get(authToken, getUsers);
 
 router.route("/fillDatabase").get(fillDatabase);
 
