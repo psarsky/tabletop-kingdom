@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 import { database, User } from "../models/init.js";
 
 const register = async (req, res) => {
@@ -225,9 +226,10 @@ const fillDatabase = async (_, res) => {
 		);
 		await User.bulkCreate(toAdd);
 		return res.status(201).send("Database filled");
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({ error: "Error filling database" });
+	} catch (error) {
+		return res
+			.status(500)
+			.json({ error: `Error filling database: ${error.message}` });
 	}
 };
 

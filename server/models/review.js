@@ -2,29 +2,30 @@ import { DataTypes } from "sequelize";
 
 import database from "../config/db.config.js";
 
-const OrderItem = database.define(
-	"OrderItem",
+const Review = database.define(
+	"Review",
 	{
-		orderId: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			primaryKey: true,
-		},
 		productId: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			primaryKey: true,
 		},
-		quantity: {
+		userId: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		price: {
-			type: DataTypes.FLOAT,
+		rating: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			validate: { min: 0, max: 5 },
+		},
+		comment: {
+			type: DataTypes.TEXT,
 			allowNull: false,
 		},
 	},
-	{ timestamps: false }
+	{
+		timestamps: true,
+	}
 );
 
-export default OrderItem;
+export default Review;

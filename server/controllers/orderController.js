@@ -44,7 +44,8 @@ const updateOrder = async (req, res) => {
 	try {
 		const order = await Order.findByPk(req.params.id);
 		if (!order) return res.status(404).send("Order not found");
-		if (order.userId !== req.user.id) res.status(403).send("Forbidden");
+		if (order.userId !== req.user.id)
+			return res.status(403).send("Forbidden");
 		const items = req.body;
 		if (!items || !Array.isArray(items) || items.length === 0) {
 			return res.status(400).send("No fields to update");
@@ -116,7 +117,7 @@ const deleteOrder = async (req, res) => {
 	}
 };
 
-const getOrderByID = async (req, res) => {
+const getOrderById = async (req, res) => {
 	try {
 		const order = await Order.findByPk(req.params.id, {
 			include: [
@@ -137,22 +138,20 @@ const getOrderByID = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
 	try {
-		if (req.params.userID != req.user.id)
+		if (req.params.userId != req.user.id)
 			return res.status(403).send("Forbidden");
-		else {
-			const orders = await Order.findAll({
-				where: { userID: req.params.userID },
-				include: [
-					{
-						model: OrderItem,
-						as: "items",
-					},
-				],
-			});
-			if (orders.length === 0)
-				res.status(404).send("No orders found for this user");
-			else res.status(200).json(orders);
-		}
+		const orders = await Order.findAll({
+			where: { userId: req.params.userId },
+			include: [
+				{
+					model: OrderItem,
+					as: "items",
+				},
+			],
+		});
+		if (orders.length === 0)
+			return res.status(404).send("No orders found for this user");
+		return res.status(200).json(orders);
 	} catch (error) {
 		return res.status(500).json({
 			error: `An error occurred while searching for orders: ${error.message}`,
@@ -194,9 +193,8 @@ const fillDatabase = async (_, res) => {
 			await OrderItem.bulkCreate(orderItems);
 		}
 		return res.status(201).send("Database filled");
-	} catch (err) {
-		console.error(err);
-		return res.status(500).send("Error filling database");
+	} catch (error) {
+		return res.status(500).send(`Error filling database: ${error.message}`);
 	}
 };
 
@@ -204,7 +202,7 @@ export {
 	addOrder,
 	updateOrder,
 	deleteOrder,
-	getOrderByID,
+	getOrderById,
 	getUserOrders,
 	getOrders,
 	fillDatabase,

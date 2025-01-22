@@ -1,18 +1,19 @@
-/*
-to add:
-get route for reviews?
-*/
-
 import express from "express";
+
+import { authToken } from "../middleware/auth.js";
 import {
 	addProduct,
 	updateProduct,
 	deleteProduct,
-	getProductByID,
+	getProductById,
 	getProducts,
 	getCategories,
 	fillDatabase,
 } from "../controllers/productController.js";
+import {
+	addReview,
+	getReviewsByProductId,
+} from "../controllers/reviewController.js";
 
 const router = express.Router();
 
@@ -22,7 +23,12 @@ router
 	.route("/id/:id")
 	.patch(updateProduct)
 	.delete(deleteProduct)
-	.get(getProductByID);
+    .get(getProductById);
+
+router
+	.route("/id/:id/reviews")
+    .post(authToken, addReview)
+    .get(getReviewsByProductId);
 
 router.route("/categories").get(getCategories);
 

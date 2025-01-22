@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+
 import database from "../config/db.config.js";
 
 const Order = database.define(

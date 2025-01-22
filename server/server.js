@@ -1,9 +1,11 @@
 import express from "express";
+import dotenv from "dotenv";
+
 import { database } from "./models/init.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-import dotenv from "dotenv";
+import reviewRoutes from "./routes/reviewRoutes.js";
 
 dotenv.config();
 const server = express();
@@ -13,6 +15,7 @@ server.use(express.json());
 server.use("/products", productRoutes);
 server.use("/users", userRoutes);
 server.use("/orders", orderRoutes);
+server.use("/reviews", reviewRoutes);
 
 database
 	.sync({ force: false })

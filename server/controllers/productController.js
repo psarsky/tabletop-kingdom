@@ -1,8 +1,3 @@
-/*
-to add:
-get route for reviews?
-*/
-
 import { database, Product } from "../models/init.js";
 
 const addProduct = async (req, res) => {
@@ -85,7 +80,7 @@ const deleteProduct = async (req, res) => {
 	}
 };
 
-const getProductByID = async (req, res) => {
+const getProductById = async (req, res) => {
 	try {
 		const product = await Product.findByPk(req.params.id);
 		if (!product) return res.status(404).send("Product not found");
@@ -132,16 +127,18 @@ const fillDatabase = async (_, res) => {
 				description: product.description,
 				category: product.category,
 				image: product.thumbnail,
-				rating: Math.random() * 5,
-				count: Math.floor(Math.random() * 200),
+				rating: 0,
+				count: 0,
 				stock: Math.floor(Math.random() * 200),
 			}));
 			Product.bulkCreate(toAdd)
 				.then(() => {
 					return res.status(201).send("Database filled");
 				})
-				.catch((err) => {
-					res.status(500).send(err);
+				.catch((error) => {
+					return res
+						.status(500)
+						.send(`Error filling database: ${error.message}`);
 				});
 		});
 };
@@ -150,7 +147,7 @@ export {
 	addProduct,
 	updateProduct,
 	deleteProduct,
-	getProductByID,
+	getProductById,
 	getProducts,
 	getCategories,
 	fillDatabase,
