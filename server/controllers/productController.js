@@ -3,8 +3,7 @@ to add:
 get route for reviews?
 */
 
-import { database } from "../config/db.config.js";
-import Product from "../models/product.js";
+import { database, Product } from "../models/init.js";
 
 const addProduct = async (req, res) => {
 	try {
@@ -123,6 +122,30 @@ const getCategories = async (_, res) => {
 	}
 };
 
+const fillDatabase = async (_, res) => {
+	fetch("https://dummyjson.com/products?limit=0")
+		.then((res) => res.json())
+		.then((data) => {
+			const toAdd = data.products.map((product) => ({
+				title: product.title,
+				price: product.price,
+				description: product.description,
+				category: product.category,
+				image: product.thumbnail,
+				rating: Math.random() * 5,
+				count: Math.floor(Math.random() * 200),
+				stock: Math.floor(Math.random() * 200),
+			}));
+			Product.bulkCreate(toAdd)
+				.then(() => {
+					return res.status(201).send("Database filled");
+				})
+				.catch((err) => {
+					res.status(500).send(err);
+				});
+		});
+};
+
 export {
 	addProduct,
 	updateProduct,
@@ -130,4 +153,5 @@ export {
 	getProductByID,
 	getProducts,
 	getCategories,
+	fillDatabase,
 };

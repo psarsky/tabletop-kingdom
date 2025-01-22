@@ -11,6 +11,7 @@ import {
 	getProductByID,
 	getProducts,
 	getCategories,
+	fillDatabase,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -24,5 +25,7 @@ router
 	.get(getProductByID);
 
 router.route("/categories").get(getCategories);
+
+router.route("/fillDatabase").get(fillDatabase);
 
 export default router;

@@ -1,8 +1,7 @@
 import { Op } from "sequelize";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
-import { database } from "../config/db.config.js";
+import { database, User } from "../models/init.js";
 
 const register = async (req, res) => {
 	try {
@@ -202,4 +201,38 @@ const getUsers = async (_, res) => {
 	}
 };
 
-export { register, login, updateUser, deleteUser, getUserById, getUsers };
+const fillDatabase = async (_, res) => {
+	fetch("https://dummyjson.com/users?limit=0")
+		.then((res) => res.json())
+		.then((data) => {
+			const toAdd = data.users.map((user) => ({
+				username: user.username,
+				email: user.email,
+				password: user.password,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				address: user.address.address,
+				postalCode: user.address.postalCode,
+				city: user.address.city,
+				phone: user.phone,
+				role: user.role,
+			}));
+			User.bulkCreate(toAdd)
+				.then(() => {
+					return res.status(201).send("Database filled");
+				})
+				.catch((err) => {
+					res.status(500).send(err);
+				});
+		});
+};
+
+export {
+	register,
+	login,
+	updateUser,
+	deleteUser,
+	getUserById,
+	getUsers,
+	fillDatabase,
+};
