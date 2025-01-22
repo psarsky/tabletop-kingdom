@@ -57,14 +57,14 @@ const register = async (req, res) => {
 			for (let user of users) {
 				if (user.username === username) {
 					return res
-						.status(401)
+						.status(400)
 						.send(
 							"Username already exists, please choose another one"
 						);
 				}
 				if (user.email === email) {
 					return res
-						.status(401)
+						.status(400)
 						.send(
 							"Email already exists, please choose another one or login"
 						);
@@ -72,7 +72,7 @@ const register = async (req, res) => {
 			}
 		}
 		if (role && role !== "admin" && role !== "user")
-			return res.status(401).send("Invalid role");
+			return res.status(400).send("Invalid role");
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const user = await User.create({
 			username,
@@ -86,9 +86,9 @@ const register = async (req, res) => {
 			phone,
 			role,
 		});
-		res.status(201).json({ id: user.id });
+		return res.status(201).json({ id: user.id });
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: `An error occurred during registration: ${error.message}`,
 		});
 	}
@@ -103,14 +103,14 @@ const login = async (req, res) => {
 			},
 		});
 		if (!user || !(await bcrypt.compare(password, user.password))) {
-			return res.status(401).send("Invalid email/username or password");
+			return res.status(400).send("Invalid email/username or password");
 		}
 		const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, {
 			expiresIn: "1h",
 		});
-		res.status(200).json({ token });
+		return res.status(200).json({ token });
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: `An error occurred during login: ${error.message}`,
 		});
 	}
@@ -119,49 +119,47 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
 	try {
 		const user = await User.findByPk(req.params.id);
-		if (!user) res.status(404).send("User not found");
-		else {
-			const {
-				username,
-				email,
-				password,
-				firstName,
-				lastName,
-				address,
-				postalCode,
-				city,
-				phone,
-			} = req.body;
-			if (
-				!username &&
-				!email &&
-				!password &&
-				!firstName &&
-				!lastName &&
-				!address &&
-				!postalCode &&
-				!city &&
-				!phone
-			) {
-				return res.status(400).send("No fields to update");
-			}
-			await user.update({
-				username: username ? username : user.username,
-				email: email ? email : user.email,
-				password: password
-					? await bcrypt.hash(password, 10)
-					: user.password,
-				firstName: firstName ? firstName : user.firstName,
-				lastName: lastName ? lastName : user.lastName,
-				address: address ? address : user.address,
-				postalCode: postalCode ? postalCode : user.count,
-				city: city ? city : user.city,
-				phone: phone ? phone : user.phone,
-			});
-			res.status(200).send("User updated");
+		if (!user) return res.status(404).send("User not found");
+		const {
+			username,
+			email,
+			password,
+			firstName,
+			lastName,
+			address,
+			postalCode,
+			city,
+			phone,
+		} = req.body;
+		if (
+			!username &&
+			!email &&
+			!password &&
+			!firstName &&
+			!lastName &&
+			!address &&
+			!postalCode &&
+			!city &&
+			!phone
+		) {
+			return res.status(400).send("No fields to update");
 		}
+		await user.update({
+			username: username ? username : user.username,
+			email: email ? email : user.email,
+			password: password
+				? await bcrypt.hash(password, 10)
+				: user.password,
+			firstName: firstName ? firstName : user.firstName,
+			lastName: lastName ? lastName : user.lastName,
+			address: address ? address : user.address,
+			postalCode: postalCode ? postalCode : user.count,
+			city: city ? city : user.city,
+			phone: phone ? phone : user.phone,
+		});
+		return res.status(200).send("User updated");
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: `An error occurred while updating a user: ${error.message}`,
 		});
 	}
@@ -170,16 +168,12 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
 	try {
 		const user = await User.findByPk(req.params.id);
-		if (!user) res.status(404).send("User not found");
-		else {
-			await user.destroy();
-			await database.query(
-				"DELETE FROM sqlite_sequence WHERE name='Users'"
-			);
-			res.status(200).send("User deleted");
-		}
+		if (!user) return res.status(404).send("User not found");
+		await user.destroy();
+		await database.query("DELETE FROM sqlite_sequence WHERE name='Users'");
+		return res.status(200).send("User deleted");
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: `An error occurred while deleting a user: ${error.message}`,
 		});
 	}
@@ -188,10 +182,10 @@ const deleteUser = async (req, res) => {
 const getUserById = async (req, res) => {
 	try {
 		const user = await User.findByPk(req.params.id);
-		if (!user) res.status(404).send("User not found");
-		else res.status(200).json(user);
+		if (!user) return res.status(404).send("User not found");
+		return res.status(200).json(user);
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: `An error occurred while searching for a user: ${error.message}`,
 		});
 	}
@@ -200,9 +194,9 @@ const getUserById = async (req, res) => {
 const getUsers = async (_, res) => {
 	try {
 		const users = await User.findAll();
-		res.status(200).json(users);
+		return res.status(200).json(users);
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			error: `An error occurred while searching for users: ${error.message}`,
 		});
 	}
