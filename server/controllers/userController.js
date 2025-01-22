@@ -104,9 +104,13 @@ const login = async (req, res) => {
 		if (!user || !(await bcrypt.compare(password, user.password))) {
 			return res.status(400).send("Invalid email/username or password");
 		}
-		const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, {
-			expiresIn: "1h",
-		});
+		const token = jwt.sign(
+			{ id: user.id, username: user.username, role: user.role },
+			process.env.TOKEN_SECRET,
+			{
+				expiresIn: "1h",
+			}
+		);
 		return res.status(200).json({ token });
 	} catch (error) {
 		return res.status(500).json({
@@ -202,13 +206,14 @@ const getUsers = async (_, res) => {
 };
 
 const fillDatabase = async (_, res) => {
-	fetch("https://dummyjson.com/users?limit=0")
-		.then((res) => res.json())
-		.then((data) => {
-			const toAdd = data.users.map((user) => ({
+	try {
+		const response = await fetch("https://dummyjson.com/users?limit=0");
+		const data = await response.json();
+		const toAdd = await Promise.all(
+			data.users.map(async (user) => ({
 				username: user.username,
 				email: user.email,
-				password: user.password,
+				password: await bcrypt.hash(user.password, 10),
 				firstName: user.firstName,
 				lastName: user.lastName,
 				address: user.address.address,
@@ -216,15 +221,14 @@ const fillDatabase = async (_, res) => {
 				city: user.address.city,
 				phone: user.phone,
 				role: user.role,
-			}));
-			User.bulkCreate(toAdd)
-				.then(() => {
-					return res.status(201).send("Database filled");
-				})
-				.catch((err) => {
-					res.status(500).send(err);
-				});
-		});
+			}))
+		);
+		await User.bulkCreate(toAdd);
+		return res.status(201).send("Database filled");
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({ error: "Error filling database" });
+	}
 };
 
 export {

@@ -1,26 +1,30 @@
-import { database, Order, OrderItem } from "../models/init.js";
+import { database, Product, Order, OrderItem } from "../models/init.js";
 
 const addOrder = async (req, res) => {
 	try {
-		const { userId, items } = req.body;
-		if (!userId || !items || !Array.isArray(items) || items.length === 0) {
+		const items = req.body;
+		if (!items || !Array.isArray(items) || items.length === 0) {
 			return res.status(400).json({ error: "Invalid data format" });
 		}
-		items.forEach((item) => {
+		for (const item of items) {
 			if (!item.productId || !item.quantity || !item.price) {
 				return res.status(400).json({ error: "Invalid data format" });
+			}
+			const product = await Product.findByPk(item.productId);
+			if (!product) {
+				return res.status(404).json({ error: "Product not found" });
 			}
 			if (item.quantity < 1) {
 				return res
 					.status(400)
 					.json({ error: "Quantity must be greater than 0" });
 			}
-		});
+		}
 		let total = 0;
 		items.forEach((item) => {
 			total += item.price * item.quantity;
 		});
-		const order = await Order.create({ userId, total });
+		const order = await Order.create({ userId: req.user.id, total });
 		const orderItems = items.map((item) => ({
 			orderId: order.id,
 			productId: item.productId,
@@ -40,7 +44,8 @@ const updateOrder = async (req, res) => {
 	try {
 		const order = await Order.findByPk(req.params.id);
 		if (!order) return res.status(404).send("Order not found");
-		const items = req.body.items;
+		if (order.userId !== req.user.id) res.status(403).send("Forbidden");
+		const items = req.body;
 		if (!items || !Array.isArray(items) || items.length === 0) {
 			return res.status(400).send("No fields to update");
 		}
@@ -96,6 +101,8 @@ const deleteOrder = async (req, res) => {
 	try {
 		const order = await Order.findByPk(req.params.id);
 		if (!order) return res.status(404).send("Order not found");
+		if (order.userId !== req.user.id)
+			return res.status(403).send("Forbidden");
 		await order.destroy();
 		await database.query("DELETE FROM sqlite_sequence WHERE name='Orders'");
 		await database.query(
@@ -124,6 +131,31 @@ const getOrderByID = async (req, res) => {
 	} catch (error) {
 		return res.status(500).json({
 			error: `An error occurred while searching for an order: ${error.message}`,
+		});
+	}
+};
+
+const getUserOrders = async (req, res) => {
+	try {
+		if (req.params.userID != req.user.id)
+			return res.status(403).send("Forbidden");
+		else {
+			const orders = await Order.findAll({
+				where: { userID: req.params.userID },
+				include: [
+					{
+						model: OrderItem,
+						as: "items",
+					},
+				],
+			});
+			if (orders.length === 0)
+				res.status(404).send("No orders found for this user");
+			else res.status(200).json(orders);
+		}
+	} catch (error) {
+		return res.status(500).json({
+			error: `An error occurred while searching for orders: ${error.message}`,
 		});
 	}
 };
@@ -173,6 +205,7 @@ export {
 	updateOrder,
 	deleteOrder,
 	getOrderByID,
+	getUserOrders,
 	getOrders,
 	fillDatabase,
 };
