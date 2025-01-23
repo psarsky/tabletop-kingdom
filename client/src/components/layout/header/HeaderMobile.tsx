@@ -9,15 +9,14 @@ import {
 	MenuButton,
 } from "../../../styles/layout/HeaderStyle";
 import Actions from "./Actions";
-import { useDrawerMenuContext } from "../../../context/DrawerMenuContext";
+import { useUIContext } from "../../../context/UIContext";
 
 function HeaderMobile(props: { matches: boolean }): JSX.Element {
-
-    const { setOpen } = useDrawerMenuContext();
+	const { setDrawerOpen, setShowSearchBox } = useUIContext();
 
 	return (
 		<HeaderContainer>
-			<IconBtn onClick = {() => setOpen(true)}>
+			<IconBtn onClick={() => setDrawerOpen(true)}>
 				<MenuIcon />
 			</IconBtn>
 			<MenuButton component={Link} to="/">
@@ -27,7 +26,7 @@ function HeaderMobile(props: { matches: boolean }): JSX.Element {
 					Kingdom
 				</Title>
 			</MenuButton>
-			<IconBtn>
+			<IconBtn onClick={() => setShowSearchBox(true)}>
 				<SearchIcon />
 			</IconBtn>
 			<Actions matches={props.matches} />

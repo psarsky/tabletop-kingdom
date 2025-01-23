@@ -1,17 +1,20 @@
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import {
 	HeaderContainer,
 	Title,
-	ListIcon,
 	MenuButton,
+    MenuButton2,
 } from "../../../styles/layout/HeaderStyle";
 import Actions from "./Actions";
+import { useUIContext } from "../../../context/UIContext";
 
 function HeaderDesktop(props: { matches: boolean }): JSX.Element {
-	return (
+	
+    const { setShowSearchBox } = useUIContext();
+    
+    return (
 		<HeaderContainer>
 			<MenuButton component={Link} to="/">
 				<Title>
@@ -19,9 +22,6 @@ function HeaderDesktop(props: { matches: boolean }): JSX.Element {
 					<br />
 					Kingdom
 				</Title>
-			</MenuButton>
-			<MenuButton component={Link} to="/">
-				Home
 			</MenuButton>
 			<MenuButton component={Link} to="/products">
 				Products
@@ -32,12 +32,9 @@ function HeaderDesktop(props: { matches: boolean }): JSX.Element {
 			<MenuButton component={Link} to="/user">
 				Account
 			</MenuButton>
-			<Button>
-				<ListIcon>
-					<SearchIcon />
-				</ListIcon>
-			</Button>
-
+            <MenuButton2 onClick={() => setShowSearchBox(true)}>
+                <SearchIcon />
+            </MenuButton2>
 			<Actions matches={props.matches} />
 		</HeaderContainer>
 	);

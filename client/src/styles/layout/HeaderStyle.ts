@@ -34,13 +34,21 @@ const MyList = styled(List)((props: { type: string }) => ({
 	display: props.type === "row" ? "flex" : "block",
 	flexGrow: 3,
 	justifyContent: "center",
-	alignItems: "center",
+    alignItems: "center",
+    margin: "0",
+    padding: "0",
 }));
 
 const MenuButton = styled(Button)((_props: { component: any; to: string }) => ({
 	color: theme.palette.text.primary,
-	fontFamily: "Uncial Antiqua",
+    justifyContent: "center",
+    minHeight: "100px",
+}));
+
+const MenuButton2 = styled(Button)(() => ({
+	color: theme.palette.text.primary,
 	justifyContent: "center",
+	aspectRatio: "1/1",
 }));
 
 const ListIcon = styled(ListItemIcon)(() => ({
@@ -54,6 +62,8 @@ const ListButton = styled(ListItemButton)(
 		textDecoration: "none",
 		color: "inherit",
 		justifyContent: "center",
+		minHeight: "60px",
+		minWidth: "100px",
 	})
 );
 
@@ -66,8 +76,8 @@ const ActionIconsContainerMobile = styled(Box)(() => ({
 	background: theme.palette.secondary.main,
 	position: "fixed",
 	bottom: 0,
-	left: 0,
-	padding: "2px 8px",
+    left: 0,
+	padding: "0 8px",
 	width: "100%",
 	alignItems: "center",
 	zIndex: 1000,
@@ -75,7 +85,7 @@ const ActionIconsContainerMobile = styled(Box)(() => ({
 }));
 
 const IconBtn = styled(IconButton)(() => ({
-	color: theme.palette.text.primary,
+    color: theme.palette.text.primary,
 }));
 
 const MenuDivider = styled(Divider)(() => ({
@@ -85,12 +95,13 @@ const MenuDivider = styled(Divider)(() => ({
 export {
 	HeaderContainer,
 	Title,
-	MyList,
-	MenuButton,
+    MyList,
+    MenuButton,
+    MenuButton2,
 	ListIcon,
 	ListButton,
 	ActionIconsContainerDesktop,
 	ActionIconsContainerMobile,
-	IconBtn,
-	MenuDivider,
+    MenuDivider,
+    IconBtn,
 };

@@ -9,15 +9,15 @@ import {
 	DrawerCloseButton,
 	DrawerDivider,
 } from "../../../styles/layout/DrawerStyle";
-import { useDrawerMenuContext } from "../../../context/DrawerMenuContext";
+import { useUIContext } from "../../../context/UIContext";
 import theme from "../../../util/theme";
 
 function DrawerMenu() {
-	const { open, setOpen } = useDrawerMenuContext();
+	const { drawerOpen, setDrawerOpen } = useUIContext();
 	return (
 		<Fragment>
-			{open && (
-				<DrawerCloseButton onClick={() => setOpen(false)}>
+			{drawerOpen && (
+				<DrawerCloseButton onClick={() => setDrawerOpen(false)}>
 					<CloseIcon
 						sx={{
 							fontSize: "2.5rem",
@@ -26,10 +26,10 @@ function DrawerMenu() {
 					/>
 				</DrawerCloseButton>
 			)}
-			<Drawer open={open}>
+			<Drawer open={drawerOpen}>
 				<ButtonContainer>
 					<DrawerButton
-						onClick={() => setOpen(false)}
+						onClick={() => setDrawerOpen(false)}
 						component={Link}
 						to="/"
 					>
@@ -37,7 +37,7 @@ function DrawerMenu() {
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
 					<DrawerButton
-						onClick={() => setOpen(false)}
+						onClick={() => setDrawerOpen(false)}
 						component={Link}
 						to="/products"
 					>
@@ -45,7 +45,7 @@ function DrawerMenu() {
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
 					<DrawerButton
-						onClick={() => setOpen(false)}
+						onClick={() => setDrawerOpen(false)}
 						component={Link}
 						to="/categories"
 					>
@@ -53,7 +53,7 @@ function DrawerMenu() {
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
 					<DrawerButton
-						onClick={() => setOpen(false)}
+						onClick={() => setDrawerOpen(false)}
 						component={Link}
 						to="/user"
 					>

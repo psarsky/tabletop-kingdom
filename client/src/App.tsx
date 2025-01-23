@@ -10,11 +10,11 @@ import Register from "./pages/Register.tsx";
 import Orders from "./pages/Orders.tsx";
 import User from "./pages/User.tsx";
 import NoPage from "./pages/NoPage.tsx";
-import { DrawerMenuProvider } from "./context/DrawerMenuContext.tsx";
+import { UIProvider } from "./context/UIContext.tsx";
 
 function App(): JSX.Element {
-    return (
-		<DrawerMenuProvider>
+	return (
+		<UIProvider>
 			<BrowserRouter>
 				<Routes>
 					<Route path={"/"} element={<Layout />}>
@@ -30,7 +30,7 @@ function App(): JSX.Element {
 					</Route>
 				</Routes>
 			</BrowserRouter>
-		</DrawerMenuProvider>
+		</UIProvider>
 	);
 }
 
