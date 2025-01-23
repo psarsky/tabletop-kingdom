@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -7,6 +6,7 @@ import {
 	HeaderContainer,
 	Title,
 	IconBtn,
+	MenuButton,
 } from "../../../styles/layout/HeaderStyle";
 import Actions from "./Actions";
 
@@ -16,17 +16,13 @@ function HeaderMobile(props: { matches: boolean }): JSX.Element {
 			<IconBtn>
 				<MenuIcon />
 			</IconBtn>
-			<Button
-				component={Link}
-				to="/"
-				sx={{ fontFamily: "Uncial Antiqua", justifyContent: "center" }}
-			>
+			<MenuButton component={Link} to="/">
 				<Title>
 					Tabletop
 					<br />
 					Kingdom
 				</Title>
-			</Button>
+			</MenuButton>
 			<IconBtn>
 				<SearchIcon />
 			</IconBtn>

@@ -5,6 +5,9 @@ import {
 	ListItemIcon,
 	Box,
 	IconButton,
+	Divider,
+	ListItemButton,
+	Button,
 } from "@mui/material";
 
 import theme from "../../util/theme";
@@ -34,11 +37,25 @@ const MyList = styled(List)((props: { type: string }) => ({
 	alignItems: "center",
 }));
 
+const MenuButton = styled(Button)((_props: { component: any; to: string }) => ({
+	color: theme.palette.text.primary,
+	fontFamily: "Uncial Antiqua",
+	justifyContent: "center",
+}));
+
 const ListIcon = styled(ListItemIcon)(() => ({
 	color: theme.palette.text.primary,
 	display: "flex",
 	justifyContent: "center",
 }));
+
+const ListButton = styled(ListItemButton)(
+	(_props: { component: any; to: string }) => ({
+		textDecoration: "none",
+		color: "inherit",
+		justifyContent: "center",
+	})
+);
 
 const ActionIconsContainerDesktop = styled(Box)(() => ({
 	flexGrow: 0,
@@ -61,12 +78,19 @@ const IconBtn = styled(IconButton)(() => ({
 	color: theme.palette.text.primary,
 }));
 
+const MenuDivider = styled(Divider)(() => ({
+	backgroundColor: theme.palette.text.primary,
+}));
+
 export {
 	HeaderContainer,
 	Title,
 	MyList,
+	MenuButton,
 	ListIcon,
+	ListButton,
 	ActionIconsContainerDesktop,
 	ActionIconsContainerMobile,
 	IconBtn,
+	MenuDivider,
 };

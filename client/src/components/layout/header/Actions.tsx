@@ -1,16 +1,16 @@
-import { Divider, ListItemButton } from "@mui/material";
+import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
-import { Link as RouterLink } from "react-router-dom";
 
 import {
 	MyList,
 	ListIcon,
 	ActionIconsContainerMobile,
 	ActionIconsContainerDesktop,
+	MenuDivider,
+	ListButton,
 } from "../../../styles/layout/HeaderStyle";
-import theme from "../../../util/theme";
 
 function Actions(props: { matches: boolean }): JSX.Element {
 	const Component = props.matches
@@ -20,65 +20,25 @@ function Actions(props: { matches: boolean }): JSX.Element {
 	return (
 		<Component>
 			<MyList type="row">
-				<Divider
-					orientation="vertical"
-					flexItem
-					sx={{ bgcolor: theme.palette.text.primary }}
-				/>
-				<ListItemButton
-					component={RouterLink}
-					to="/cart"
-					sx={{
-						textDecoration: "none",
-						color: "inherit",
-						justifyContent: "center",
-					}}
-				>
+				<MenuDivider orientation="vertical" flexItem />
+				<ListButton component={Link} to="/cart">
 					<ListIcon>
 						<ShoppingCartIcon />
 					</ListIcon>
-				</ListItemButton>
-				<Divider
-					orientation="vertical"
-					flexItem
-					sx={{ bgcolor: theme.palette.text.primary }}
-				/>
-				<ListItemButton
-					component={RouterLink}
-					to="/favorites"
-					sx={{
-						textDecoration: "none",
-						color: "inherit",
-						justifyContent: "center",
-					}}
-				>
+				</ListButton>
+				<MenuDivider orientation="vertical" flexItem />
+				<ListButton component={Link} to="/favorites">
 					<ListIcon>
 						<FavoriteIcon />
 					</ListIcon>
-				</ListItemButton>
-				<Divider
-					orientation="vertical"
-					flexItem
-					sx={{ bgcolor: theme.palette.text.primary }}
-				/>
-				<ListItemButton
-					component={RouterLink}
-					to="/account"
-					sx={{
-						textDecoration: "none",
-						color: "inherit",
-						justifyContent: "center",
-					}}
-				>
+				</ListButton>
+				<MenuDivider orientation="vertical" flexItem />
+				<ListButton component={Link} to="/account">
 					<ListIcon>
 						<PersonIcon />
 					</ListIcon>
-				</ListItemButton>
-				<Divider
-					orientation="vertical"
-					flexItem
-					sx={{ bgcolor: theme.palette.text.primary }}
-				/>
+				</ListButton>
+				<MenuDivider orientation="vertical" flexItem />
 			</MyList>
 		</Component>
 	);
