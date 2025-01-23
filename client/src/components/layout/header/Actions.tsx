@@ -27,13 +27,13 @@ function Actions(props: { matches: boolean }): JSX.Element {
 					</ListIcon>
 				</ListButton>
 				<MenuDivider orientation="vertical" flexItem />
-				<ListButton component={Link} to="/favorites">
+				<ListButton component={Link} to="/orders">
 					<ListIcon>
 						<FavoriteIcon />
 					</ListIcon>
 				</ListButton>
 				<MenuDivider orientation="vertical" flexItem />
-				<ListButton component={Link} to="/account">
+				<ListButton component={Link} to="/user">
 					<ListIcon>
 						<PersonIcon />
 					</ListIcon>

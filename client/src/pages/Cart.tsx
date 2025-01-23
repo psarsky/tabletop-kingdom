@@ -2,12 +2,12 @@ import { Typography } from "@mui/material";
 
 import ContentContainer from "../styles/layout/ContentContainer";
 
-function Orders() {
+function Cart() {
 	return (
 		<ContentContainer>
-			<Typography variant="h1">Orders</Typography>
+			<Typography variant="h1">Cart</Typography>
 		</ContentContainer>
 	);
 }
 
-export default Orders;
+export default Cart;

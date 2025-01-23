@@ -5,6 +5,7 @@ import Home from "./pages/Home.tsx";
 import Products from "./pages/Products.tsx";
 import Product from "./pages/Product.tsx";
 import Categories from "./pages/Categories.tsx";
+import Cart from "./pages/Cart.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Orders from "./pages/Orders.tsx";
@@ -21,7 +22,8 @@ function App(): JSX.Element {
 						<Route index element={<Home />} />
 						<Route path={"/products"} element={<Products />} />
 						<Route path={"/products/:id"} element={<Product />} />
-						<Route path={"/categories"} element={<Categories />} />
+                        <Route path={"/categories"} element={<Categories />} />
+                        <Route path={"/cart"} element={<Cart />} />
 						<Route path={"/login"} element={<Login />} />
 						<Route path={"/register"} element={<Register />} />
 						<Route path={"/orders"} element={<Orders />} />

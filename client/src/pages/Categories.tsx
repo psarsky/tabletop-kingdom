@@ -1,5 +1,13 @@
+import { Typography } from "@mui/material";
+
+import ContentContainer from "../styles/layout/ContentContainer";
+
 function Categories() {
-	return <h1>Categories</h1>;
+	return (
+		<ContentContainer>
+			<Typography variant="h1">Categories</Typography>
+		</ContentContainer>
+	);
 }
 
 export default Categories;
