@@ -10,24 +10,27 @@ import Register from "./pages/Register.tsx";
 import Orders from "./pages/Orders.tsx";
 import User from "./pages/User.tsx";
 import NoPage from "./pages/NoPage.tsx";
+import { DrawerMenuProvider } from "./context/DrawerMenuContext.tsx";
 
 function App(): JSX.Element {
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path={"/"} element={<Layout />}>
-					<Route index element={<Home />} />
-					<Route path={"/products"} element={<Products />} />
-                    <Route path={"/products/:id"} element={<Product />} />
-                    <Route path={"/categories"} element={<Categories />} />
-					<Route path={"/login"} element={<Login />} />
-					<Route path={"/register"} element={<Register />} />
-					<Route path={"/orders"} element={<Orders />} />
-					<Route path={"/user"} element={<User />} />
-					<Route path={"*"} element={<NoPage />} />
-				</Route>
-			</Routes>
-		</BrowserRouter>
+    return (
+		<DrawerMenuProvider>
+			<BrowserRouter>
+				<Routes>
+					<Route path={"/"} element={<Layout />}>
+						<Route index element={<Home />} />
+						<Route path={"/products"} element={<Products />} />
+						<Route path={"/products/:id"} element={<Product />} />
+						<Route path={"/categories"} element={<Categories />} />
+						<Route path={"/login"} element={<Login />} />
+						<Route path={"/register"} element={<Register />} />
+						<Route path={"/orders"} element={<Orders />} />
+						<Route path={"/user"} element={<User />} />
+						<Route path={"*"} element={<NoPage />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</DrawerMenuProvider>
 	);
 }
 

@@ -9,11 +9,15 @@ import {
 	MenuButton,
 } from "../../../styles/layout/HeaderStyle";
 import Actions from "./Actions";
+import { useDrawerMenuContext } from "../../../context/DrawerMenuContext";
 
 function HeaderMobile(props: { matches: boolean }): JSX.Element {
+
+    const { setOpen } = useDrawerMenuContext();
+
 	return (
 		<HeaderContainer>
-			<IconBtn>
+			<IconBtn onClick = {() => setOpen(true)}>
 				<MenuIcon />
 			</IconBtn>
 			<MenuButton component={Link} to="/">

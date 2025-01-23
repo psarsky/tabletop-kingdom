@@ -26,6 +26,16 @@ const themeOptions: ThemeOptions = {
 				disableElevation: true,
 			},
 		},
+		MuiDrawer: {
+			styleOverrides: {
+				paper: {
+                    background: "#181C14",
+                    width: "200px",
+                    borderRadius: "0px 100px 0px 0px",
+                    overflow: "hidden",
+				},
+			},
+		},
 	},
 	breakpoints: {
 		values: {
