@@ -1,7 +1,8 @@
-import { useEffect, Fragment } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import Header from "../components/layout/header/Header";
+import Footer from "../components/layout/footer/Footer";
 
 function Layout(): JSX.Element {
 	useEffect(() => {
@@ -9,10 +10,11 @@ function Layout(): JSX.Element {
 	}, []);
 
 	return (
-		<Fragment>
+		<>
 			<Header />
             <Outlet />
-		</Fragment>
+            <Footer />
+		</>
 	);
 }
 
