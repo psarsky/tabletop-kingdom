@@ -24,7 +24,6 @@ const themeOptions: ThemeOptions = {
 				variant: "contained",
 				color: "primary",
 				disableElevation: true,
-				disableRipple: true,
 			},
 		},
 	},

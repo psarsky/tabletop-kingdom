@@ -2,7 +2,6 @@ import {
 	styled,
 	Typography,
 	List,
-	ListItemButton,
 	ListItemIcon,
 	Box,
 	IconButton,
@@ -13,7 +12,7 @@ import theme from "../../util/theme";
 const HeaderContainer = styled(Box)(() => ({
 	background: theme.palette.primary.main,
 	display: "flex",
-	justifyContent: "center",
+	justifyContent: "space-between",
 	alignItems: "center",
 	padding: "2px 15px",
 }));
@@ -33,10 +32,6 @@ const MyList = styled(List)((props: { type: string }) => ({
 	flexGrow: 3,
 	justifyContent: "center",
 	alignItems: "center",
-}));
-
-const ListButton = styled(ListItemButton)(() => ({
-	justifyContent: "center",
 }));
 
 const ListIcon = styled(ListItemIcon)(() => ({
@@ -70,7 +65,6 @@ export {
 	HeaderContainer,
 	Title,
 	MyList,
-	ListButton,
 	ListIcon,
 	ActionIconsContainerDesktop,
 	ActionIconsContainerMobile,

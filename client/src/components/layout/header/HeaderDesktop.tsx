@@ -1,34 +1,83 @@
-import { ListItemText } from "@mui/material";
+import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import {
 	HeaderContainer,
 	Title,
-	MyList,
-	ListButton,
 	ListIcon,
 } from "../../../styles/layout/HeaderStyle";
 import Actions from "./Actions";
+import { Link } from "react-router-dom";
+import theme from "../../../util/theme";
 
 function HeaderDesktop(props: { matches: boolean }): JSX.Element {
 	return (
 		<HeaderContainer>
-			<Title>
-				Tabletop
-				<br />
-				Kingdom
-			</Title>
-			<MyList type="row">
-				<ListItemText primary="Home" />
-				<ListItemText primary="Products" />
-				<ListItemText primary="Categories" />
-				<ListItemText primary="Account" />
-				<ListButton>
-					<ListIcon>
-						<SearchIcon />
-					</ListIcon>
-				</ListButton>
-			</MyList>
+			<Button
+				component={Link}
+				to="/"
+				sx={{
+					color: theme.palette.text.primary,
+					fontFamily: "Uncial Antiqua",
+					justifyContent: "center",
+				}}
+			>
+				<Title>
+					Tabletop
+					<br />
+					Kingdom
+				</Title>
+			</Button>
+			<Button
+				component={Link}
+				to="/"
+				sx={{
+					color: theme.palette.text.primary,
+					fontFamily: "Uncial Antiqua",
+					justifyContent: "center",
+				}}
+			>
+				Home
+			</Button>
+			<Button
+				component={Link}
+				to="/products"
+				sx={{
+					color: theme.palette.text.primary,
+					fontFamily: "Uncial Antiqua",
+					justifyContent: "center",
+				}}
+			>
+				Products
+			</Button>
+			<Button
+				component={Link}
+				to="/categories"
+				sx={{
+					color: theme.palette.text.primary,
+					fontFamily: "Uncial Antiqua",
+					justifyContent: "center",
+				}}
+			>
+				Categories
+			</Button>
+			<Button
+				component={Link}
+				to="/user"
+				sx={{
+					color: theme.palette.text.primary,
+					fontFamily: "Uncial Antiqua",
+					justifyContent: "center",
+				}}
+			>
+				Account
+			</Button>
+			<Button>
+				<ListIcon>
+					<SearchIcon />
+				</ListIcon>
+			</Button>
+
 			<Actions matches={props.matches} />
 		</HeaderContainer>
 	);

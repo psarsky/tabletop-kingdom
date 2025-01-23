@@ -1,11 +1,11 @@
-import { Divider } from "@mui/material";
+import { Divider, ListItemButton } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
+import { Link as RouterLink } from "react-router-dom";
 
 import {
 	MyList,
-	ListButton,
 	ListIcon,
 	ActionIconsContainerMobile,
 	ActionIconsContainerDesktop,
@@ -25,31 +25,55 @@ function Actions(props: { matches: boolean }): JSX.Element {
 					flexItem
 					sx={{ bgcolor: theme.palette.text.primary }}
 				/>
-				<ListButton>
+				<ListItemButton
+					component={RouterLink}
+					to="/cart"
+					sx={{
+						textDecoration: "none",
+						color: "inherit",
+						justifyContent: "center",
+					}}
+				>
 					<ListIcon>
 						<ShoppingCartIcon />
 					</ListIcon>
-				</ListButton>
+				</ListItemButton>
 				<Divider
 					orientation="vertical"
 					flexItem
 					sx={{ bgcolor: theme.palette.text.primary }}
 				/>
-				<ListButton>
+				<ListItemButton
+					component={RouterLink}
+					to="/favorites"
+					sx={{
+						textDecoration: "none",
+						color: "inherit",
+						justifyContent: "center",
+					}}
+				>
 					<ListIcon>
 						<FavoriteIcon />
 					</ListIcon>
-				</ListButton>
+				</ListItemButton>
 				<Divider
 					orientation="vertical"
 					flexItem
 					sx={{ bgcolor: theme.palette.text.primary }}
 				/>
-				<ListButton>
+				<ListItemButton
+					component={RouterLink}
+					to="/account"
+					sx={{
+						textDecoration: "none",
+						color: "inherit",
+						justifyContent: "center",
+					}}
+				>
 					<ListIcon>
 						<PersonIcon />
 					</ListIcon>
-				</ListButton>
+				</ListItemButton>
 				<Divider
 					orientation="vertical"
 					flexItem
