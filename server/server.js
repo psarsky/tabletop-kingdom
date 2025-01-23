@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import { database } from "./models/init.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -11,6 +12,7 @@ dotenv.config();
 const server = express();
 const PORT = process.env.PORT;
 
+server.use(cors());
 server.use(express.json());
 server.use("/products", productRoutes);
 server.use("/users", userRoutes);

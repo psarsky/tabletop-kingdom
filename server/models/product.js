@@ -26,7 +26,7 @@ const Product = database.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		image: {
+		thumbnail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

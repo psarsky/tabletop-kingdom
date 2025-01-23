@@ -130,7 +130,7 @@ const fillDatabase = async (req, res) => {
 				price: product.price,
 				description: product.description,
 				category: product.category,
-				image: product.thumbnail,
+				thumbnail: product.thumbnail,
 				rating: 0,
 				count: 0,
 				stock: Math.floor(Math.random() * 200),
