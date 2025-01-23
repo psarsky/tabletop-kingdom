@@ -1,15 +1,19 @@
-import { Box, styled, Theme, Typography } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 
-const BannerContainer = styled(Box)((props: { theme: Theme }) => ({
-	backgroundColor: props.theme.palette.secondary.main,
+import theme from "../../util/theme";
+
+const BannerContainer = styled(Box)(() => ({
+	background: theme.palette.secondary.main,
 	display: "flex",
-	justifyContent: "center",
-	width: "90%",
+    justifyContent: "space-between",
+    gap: "30px",
+    width: "90%",
+    maxWidth: "1200px",
 	height: "100%",
-	padding: "10px 10px",
+	padding: "30px 30px",
 	margin: "30px 0px",
 	borderRadius: "10px",
-	[props.theme.breakpoints.down("sm")]: {
+	[theme.breakpoints.down("sm")]: {
 		flexDirection: "column",
 		alignItems: "center",
 	},
@@ -17,13 +21,15 @@ const BannerContainer = styled(Box)((props: { theme: Theme }) => ({
 
 const BannerImage = styled(`img`)((props: { src: string }) => ({
 	src: `url(${props.src})`,
-	width: "400px",
+    width: "400px",
+    height: "400px",
 	borderRadius: "10px",
 }));
 
 const BannerImageM = styled(`img`)((props: { src: string }) => ({
 	src: `url(${props.src})`,
-	width: "250px",
+    width: "300px",
+    height: "300px",
 	borderRadius: "10px",
 }));
 
@@ -38,29 +44,26 @@ const BannerContent = styled(Box)(() => ({
 	display: "flex",
 	flexDirection: "column",
 	justifyContent: "center",
-	maxWidth: 420,
-	padding: "30px",
+	maxWidth: 700,
 }));
 
-const BannerTitle = styled(Typography)((props: { theme: Theme }) => ({
-	fontSize: "72px",
-	color: props.theme.palette.text.primary,
+const BannerTitle = styled(Typography)(() => ({
+	fontSize: "36px",
+	color: theme.palette.text.primary,
 	lineHeight: 1.5,
 	marginBottom: "20px",
-	[props.theme.breakpoints.down("md")]: {
-		fontSize: "42px",
+	[theme.breakpoints.down("md")]: {
+		fontSize: "24px",
 	},
 }));
 
-const BannerDescription = styled(Typography)((props: { theme: Theme }) => ({
-	color: props.theme.palette.text.primary,
+const BannerDescription = styled(Typography)(() => ({
+	color: theme.palette.text.primary,
 	lineHeight: 1.25,
 	lineSpacing: 1.25,
-	marginBottom: "3em",
-	[props.theme.breakpoints.down("md")]: {
+	[theme.breakpoints.down("md")]: {
 		lineHeight: 1.15,
 		lineSpacing: 1.15,
-		marginBottom: "1.5em",
 	},
 }));
 

@@ -23,7 +23,7 @@ const FooterInfoSectionContainer = styled(Box)(() => ({
 	justifyContent: "space-between",
 	gap: theme.spacing(4),
 	flexDirection: "row",
-	[theme.breakpoints.down("md")]: {
+	[theme.breakpoints.down("sm")]: {
 		flexDirection: "column",
 	},
 }));

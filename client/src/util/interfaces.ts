@@ -21,7 +21,6 @@ export interface ProductInterface {
 	rating: number;
 	count: number;
 	stock: number;
-	reviews: ReviewInterface[];
 }
 
 export interface ReviewInterface {
@@ -32,4 +31,11 @@ export interface ReviewInterface {
 	comment: string;
 	createdAt: string;
 	updatedAt: string;
+}
+
+export interface FetchProps {
+	url: string;
+	dependencies?: any[];
+	onFetch?: (data: any) => void;
+	timeout: number;
 }

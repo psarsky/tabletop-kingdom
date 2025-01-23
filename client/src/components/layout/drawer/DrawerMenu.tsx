@@ -1,16 +1,15 @@
 import { Fragment } from "react/jsx-runtime";
 import { Link } from "react-router-dom";
 import { Drawer } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 
 import {
 	ButtonContainer,
+	CloseIconButton,
 	DrawerButton,
 	DrawerCloseButton,
 	DrawerDivider,
 } from "../../../styles/layout/DrawerStyle";
 import { useUIContext } from "../../../context/UIContext";
-import theme from "../../../util/theme";
 
 function DrawerMenu() {
 	const { drawerOpen, setDrawerOpen } = useUIContext();
@@ -18,12 +17,7 @@ function DrawerMenu() {
 		<Fragment>
 			{drawerOpen && (
 				<DrawerCloseButton onClick={() => setDrawerOpen(false)}>
-					<CloseIcon
-						sx={{
-							fontSize: "2.5rem",
-							color: theme.palette.secondary.main,
-						}}
-					/>
+					<CloseIconButton />
 				</DrawerCloseButton>
 			)}
 			<Drawer open={drawerOpen}>

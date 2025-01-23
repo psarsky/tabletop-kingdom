@@ -1,48 +1,79 @@
 import { useEffect, useState } from "react";
-import { Box, Slide } from "@mui/material";
+import { Slide } from "@mui/material";
+import NextIcon from "@mui/icons-material/NavigateNext";
+import PreviousIcon from "@mui/icons-material/NavigateBefore";
 
 import {
 	ItemSliderContainer,
 	MessageText,
+	SlideContainer,
+	SliderControlContainer,
+	SliderTitle,
 } from "../../styles/home/ItemSliderStyle";
-
-const messages: string[] = [
-	"asdasdasdasdasdasdfasdfg",
-	"Asdfgasdgasdgadfgsdgafg",
-	"Adfasdgsdfghbnsdfbhxfgjn",
-];
+import { IconBtn } from "../../styles/layout/HeaderStyle";
+import { ProductInterface } from "../../util/interfaces";
+import useFetchFromServer from "../../hooks/useFetchFromServer";
+import ProductSliderCard from "../products/ProductSliderCard";
 
 function ItemSlider() {
-	const [messageIndex, setMessageIndex] = useState<number>(0);
+	const [productIndex, setMessageIndex] = useState<number>(0);
 	const [show, setShow] = useState<boolean>(true);
+	const [products, setProducts] = useState<ProductInterface[]>([]);
+
+	useFetchFromServer({
+		url: "http://localhost:3000/products",
+		timeout: 1000,
+		onFetch: (data: ProductInterface[]) => {
+			let random = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+			setProducts(random);
+		},
+		dependencies: [],
+	});
+
+	const handleNext = () => {
+		setShow(false);
+		setTimeout(() => {
+			setMessageIndex((prev: number) => (prev + 1) % 3);
+			setShow(true);
+		}, 1000);
+	};
 
 	useEffect(() => {
-		setTimeout(() => {
-			setShow(false);
-		}, 4000);
-
 		const intervalID = setInterval(() => {
-			setMessageIndex((prev: number) => (prev + 1) % messages.length);
-			setShow(true);
-			setTimeout(() => {
-				setShow(false);
-			}, 4000);
-		}, 5000);
+			handleNext();
+		}, 20000);
 
 		return () => clearInterval(intervalID);
-	}, []);
+	}, [products, productIndex]);
 
 	return (
 		<ItemSliderContainer>
-			<Slide
-				direction={show ? "left" : "right"}
-				in={show}
-				timeout={{ enter: 500, exit: 100 }}
-			>
-				<Box display="flex" justifyContent="center" alignItems="center">
-					<MessageText>{messages[messageIndex]}</MessageText>
-				</Box>
-			</Slide>
+			<SliderTitle>Random items of the day</SliderTitle>
+			<SliderControlContainer>
+				<IconBtn>
+					<PreviousIcon />
+				</IconBtn>
+				<SlideContainer>
+					<Slide
+						direction={show ? "left" : "right"}
+						in={show}
+						timeout={{ enter: 500, exit: 500 }}
+					>
+						<div>
+							{" "}
+							{/* Do not change, literally NOTHING ELSE WORKS */}
+							{products.length > 0 ? (
+								<ProductSliderCard product={products[productIndex]} />
+							) : (
+								<MessageText>Loading...</MessageText>
+							)}
+						</div>
+					</Slide>
+				</SlideContainer>
+				<IconBtn onClick={handleNext}>
+					<NextIcon />
+				</IconBtn>
+			</SliderControlContainer>
 		</ItemSliderContainer>
 	);
 }
