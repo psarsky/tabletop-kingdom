@@ -18,19 +18,39 @@ import theme from "../../../util/theme";
 
 function SearchBox(): JSX.Element {
 	const [search, setSearch] = useState<string>("");
+	const [category, setCategory] = useState<string>("");
+	const [categories, setCategories] = useState<string[]>([]);
 	const { showSearchBox, setShowSearchBox } = useUIContext();
+	const navigate: NavigateFunction = useNavigate();
 	const productSearchContext: ProductSearchContextType | undefined =
 		useContext(ProductSearchContext);
-	const navigate: NavigateFunction = useNavigate();
-
 	if (!productSearchContext) {
 		throw new Error("ProductSearchContext must be used within a ProductSearchProvider");
 	}
+	const { setQuery } = productSearchContext;
 
-	const { query, setQuery } = productSearchContext;
+	useFetchFromServer({
+		url: "http://localhost:3000/products/categories",
+		onFetch: (data: { category: string }[]) => {
+			let cats: string[] = data.map((cat: { category: string }) => cat.category);
+			setCategories(["", ...cats]);
+		},
+	});
+
+	const categoryList = categories.map((cat: string) => (
+		<MenuItem key={cat} value={cat}>
+			{cat ? cat : "All Categories"}
+		</MenuItem>
+	));
+
+	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			handleSearch();
+		}
+	};
 
 	const handleSearch = () => {
-		setQuery([query[0], search]);
+		setQuery([category, search]);
 		navigate(`/products`);
 		setShowSearchBox(false);
 	};
@@ -39,11 +59,12 @@ function SearchBox(): JSX.Element {
 		setSearch(e.target.value);
 	};
 
-	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			handleSearch();
-		}
+	const handleCategoryChange = (e: SelectChangeEvent<unknown>) => {
+		setCategory(e.target.value as string);
 	};
+
+	const handleClose = () => setShowSearchBox(false);
+
 	return (
 		<Slide direction="down" in={showSearchBox} timeout={500}>
 			<SearchBoxContainer>
@@ -55,61 +76,33 @@ function SearchBox(): JSX.Element {
 					onKeyDown={handleKeyPress}
 					value={search}
 				/>
-				<CategorySelect />
+				<CategorySelector variant="standard">
+					<InputLabel>Category</InputLabel>
+					<Select
+						value={category}
+						onChange={handleCategoryChange}
+						label="Category"
+						MenuProps={{
+							disablePortal: true,
+							PaperProps: {
+								style: {
+									backgroundColor: theme.palette.background.default,
+									color: theme.palette.text.primary,
+								},
+							},
+						}}
+					>
+						{categoryList}
+					</Select>
+				</CategorySelector>
 				<IconButton onClick={handleSearch}>
 					<SearchButton />
 				</IconButton>
-				<CloseIconButton onClick={() => setShowSearchBox(false)}>
+				<CloseIconButton onClick={handleClose}>
 					<CloseButton />
 				</CloseIconButton>
 			</SearchBoxContainer>
 		</Slide>
-	);
-}
-
-function CategorySelect(): JSX.Element {
-	const [categories, setCategories] = useState<string[]>([]);
-	const productSearchContext: ProductSearchContextType | undefined =
-		useContext(ProductSearchContext);
-	if (!productSearchContext) {
-		throw new Error("ProductSearchContext must be used within a ProductSearchProvider");
-	}
-	const { query, setQuery } = productSearchContext;
-
-	useFetchFromServer({
-		url: "http://localhost:3000/products/categories",
-		onFetch: (data: { category: string }[]) => {
-			let cats: string[] = data.map((cat: { category: string }) => cat.category);
-			setCategories(["", ...cats]);
-		},
-	});
-
-	return (
-		<CategorySelector variant="standard">
-			<InputLabel>Category</InputLabel>
-			<Select
-				value={query[0]}
-				onChange={(e: SelectChangeEvent<unknown>) =>
-					setQuery([e.target.value as string, query[1]])
-				}
-				label="Category"
-				MenuProps={{
-					disablePortal: true,
-					PaperProps: {
-						style: {
-							backgroundColor: theme.palette.background.default,
-							color: theme.palette.text.primary,
-						},
-					},
-				}}
-			>
-				{categories.map((cat: string) => (
-					<MenuItem key={cat} value={cat}>
-						{cat ? cat : "All Categories"}
-					</MenuItem>
-				))}
-			</Select>
-		</CategorySelector>
 	);
 }
 

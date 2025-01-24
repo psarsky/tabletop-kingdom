@@ -11,11 +11,15 @@ function HeaderMobile(props: { matches: boolean }): JSX.Element {
 	const IconButton: React.FC<{
 		onClick: () => void;
 		icon: React.ReactNode;
-	}> = ({ onClick, icon }) => <IconBtn onClick={onClick}>{icon}</IconBtn>;
+    }> = ({ onClick, icon }) => <IconBtn onClick={onClick}>{icon}</IconBtn>;
+    
+    const handleDrawerOpen = () => setDrawerOpen(true);
+
+    const handleSearchClick = () => setShowSearchBox(true);
 
 	return (
 		<HeaderContainer>
-			<IconButton onClick={() => setDrawerOpen(true)} icon={<Menu />} />
+			<IconButton onClick={handleDrawerOpen} icon={<Menu />} />
 			<MenuButton component={Link} to="/">
 				<Title>
 					Tabletop
@@ -23,7 +27,7 @@ function HeaderMobile(props: { matches: boolean }): JSX.Element {
 					Kingdom
 				</Title>
 			</MenuButton>
-			<IconButton onClick={() => setShowSearchBox(true)} icon={<Search />} />
+			<IconButton onClick={handleSearchClick} icon={<Search />} />
 			<Actions matches={props.matches} />
 		</HeaderContainer>
 	);

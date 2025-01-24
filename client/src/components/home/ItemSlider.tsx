@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Slide } from "@mui/material";
 import { NavigateNext, NavigateBefore } from "@mui/icons-material";
 
-
 import {
 	ItemSliderContainer,
 	MessageText,

@@ -14,14 +14,18 @@ function ProductGrid() {
 	if (productSearchContext === undefined) {
 		throw new Error("SearchContext must be used within a SearchProvider");
 	}
-	const { query } = productSearchContext;
+    const { query } = productSearchContext;
+    const queryString = new URLSearchParams();
+	if (query[0]) queryString.append("category", query[0]);
+    if (query[1]) queryString.append("search", query[1]);
 
 	useFetchFromServer({
-		url: `http://localhost:3000/products?&page=1&limit=10&search=${query[1]}&category=${query[0]}`,
+		url: `http://localhost:3000/products?&page=1&limit=10&${queryString.toString()}`,
 		timeout: 1000,
 		onFetch: (data: ProductInterface[]) => {
 			setProducts(data);
 		},
+		dependencies: [query],
 	});
 
 	const productGrid = products.map((product: ProductInterface) => (
@@ -40,7 +44,9 @@ function ProductGrid() {
 					: "All Products"}
 			</Typography>
 			<GridContainer container spacing={2}>
-				{products.length > 0 ? productGrid : <MessageText>Loading items...</MessageText>}
+                {products.length > 0
+                    ? productGrid
+                    : <MessageText sx={{ mb: "20px" }}>No items to show</MessageText>}
 			</GridContainer>
 		</ContentContainer>
 	);

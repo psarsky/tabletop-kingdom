@@ -26,7 +26,7 @@ function Actions(props: { matches: boolean }): JSX.Element {
 
 	return (
 		<Component>
-			<MyList type="row">
+			<MyList>
 				<MenuDivider orientation="vertical" flexItem />
 				<NavigationButton to="/cart" Icon={<ShoppingCart />} />
 				<MenuDivider orientation="vertical" flexItem />

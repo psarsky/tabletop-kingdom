@@ -12,6 +12,7 @@ import { useUIContext } from "../../../context/UIContext";
 
 function HeaderDesktop(props: { matches: boolean }): JSX.Element {
 	const { setShowSearchBox } = useUIContext();
+	const handleSearchClick = () => setShowSearchBox(true);
 	return (
 		<HeaderContainer>
 			<MenuButton component={Link} to="/">
@@ -24,7 +25,7 @@ function HeaderDesktop(props: { matches: boolean }): JSX.Element {
 			<MenuButton component={Link} to="/products">
 				See all products
 			</MenuButton>
-			<MenuButton2 onClick={() => setShowSearchBox(true)}>
+			<MenuButton2 onClick={handleSearchClick}>
 				<Search />
 			</MenuButton2>
 			<Actions matches={props.matches} />

@@ -12,24 +12,27 @@ import { useUIContext } from "../../../context/UIContext";
 
 function DrawerMenu(): JSX.Element {
 	const { drawerOpen, setDrawerOpen } = useUIContext();
+
+	const handleDrawerClose = () => setDrawerOpen(false);
+
 	return (
 		<>
 			{drawerOpen && (
-				<DrawerCloseButton onClick={() => setDrawerOpen(false)}>
+				<DrawerCloseButton onClick={handleDrawerClose}>
 					<CloseIconButton />
 				</DrawerCloseButton>
 			)}
 			<Drawer open={drawerOpen}>
 				<ButtonContainer>
-					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/">
+					<DrawerButton onClick={handleDrawerClose} component={Link} to="/">
 						Home
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
-					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/products">
+					<DrawerButton onClick={handleDrawerClose} component={Link} to="/products">
 						Products
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
-					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/user">
+					<DrawerButton onClick={handleDrawerClose} component={Link} to="/user">
 						Account
 					</DrawerButton>
 				</ButtonContainer>
