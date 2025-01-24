@@ -22,7 +22,7 @@ function App(): JSX.Element {
 						<Route path={"/"} element={<Layout />}>
 							<Route index element={<Home />} />
 							<Route path={"/products"} element={<Products />} />
-							<Route path={"/products/:id"} element={<Product />} />
+							<Route path={"/products/id/:id"} element={<Product />} />
 							<Route path={"/register"} element={<Register />} />
 							<Route path={"/login"} element={<Login />} />
 							<Route path={"/user"} element={<User />} />

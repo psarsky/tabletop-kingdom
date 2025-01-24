@@ -13,7 +13,7 @@ import {
 import { useUIContext } from "../../../context/UIContext";
 import { ProductSearchContext } from "../../../context/ProductSearchContext";
 import { ProductSearchContextType } from "../../../util/interfaces";
-import useFetchFromServer from "../../../hooks/useFetchFromServer";
+import fetchFromServer from "../../../hooks/fetchFromServer";
 import theme from "../../../util/theme";
 
 function SearchBox(): JSX.Element {
@@ -29,7 +29,7 @@ function SearchBox(): JSX.Element {
 	}
 	const { setQuery } = productSearchContext;
 
-	useFetchFromServer({
+	fetchFromServer({
 		url: "http://localhost:3000/products/categories",
 		onFetch: (data: { category: string }[]) => {
 			let cats: string[] = data.map((cat: { category: string }) => cat.category);

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Typography } from "@mui/material";
 
 import { ProductInterface } from "../../util/interfaces";
-import useFetchFromServer from "../../hooks/useFetchFromServer";
+import fetchFromServer from "../../hooks/fetchFromServer";
 import { GridContainer, MessageText } from "../../styles/products/ProductGridStyle";
 import ContentContainer from "../../styles/layout/ContentContainer";
 import ProductCard from "./ProductCard";
@@ -19,7 +19,7 @@ function ProductGrid() {
 	if (query[0]) queryString.append("category", query[0]);
     if (query[1]) queryString.append("search", query[1]);
 
-	useFetchFromServer({
+	fetchFromServer({
 		url: `http://localhost:3000/products?&page=1&limit=10&${queryString.toString()}`,
 		timeout: 1000,
 		onFetch: (data: ProductInterface[]) => {

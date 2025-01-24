@@ -22,7 +22,7 @@ function ProductCard(props: { product: ProductInterface }): JSX.Element {
 
 	const handleCardClick = () => {
 		if (product) {
-			navigate(`/product/${product.id}`);
+			navigate(`/products/id/${product.id}`);
 		}
 	};
 
