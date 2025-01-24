@@ -1,10 +1,7 @@
-import { Box, IconButton, styled, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, IconButton, styled, TextField, Theme } from "@mui/material";
+import { Search, Close } from "@mui/icons-material";
 
-import theme from "../../util/theme";
-
-const SearchBoxContainer = styled(Box)(() => ({
+const SearchBoxContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
 	backgroundColor: theme.palette.background.default,
 	opacity: 0.9,
 	display: "flex",
@@ -18,24 +15,24 @@ const SearchBoxContainer = styled(Box)(() => ({
 	zIndex: 9999,
 }));
 
-const SearchField = styled(TextField)(() => ({
-	".MuiInputLabel-root": {
+const SearchField = styled(TextField)(({ theme }: { theme: Theme }) => ({
+	"& .MuiInputLabel-root": {
 		color: theme.palette.text.primary,
 	},
-	".MuiInput-root": {
+	"& .MuiInput-root": {
 		fontSize: "1rem",
 		color: theme.palette.text.primary,
 		[theme.breakpoints.up("md")]: {
 			fontSize: "2rem",
 		},
 	},
-	".MuiInput-root:before": {
+	"& .MuiInput-root:before": {
 		borderBottom: `1px solid ${theme.palette.text.primary}`,
 	},
 	padding: "0 0 0 40px",
 }));
 
-const SearchButton = styled(SearchIcon)(() => ({
+const SearchButton = styled(Search)(({ theme }: { theme: Theme }) => ({
 	fontSize: "3rem",
 	color: theme.palette.text.primary,
 	[theme.breakpoints.down("md")]: {
@@ -43,7 +40,7 @@ const SearchButton = styled(SearchIcon)(() => ({
 	},
 }));
 
-const CloseButton = styled(CloseIcon)(() => ({
+const CloseButton = styled(Close)(({ theme }: { theme: Theme }) => ({
 	fontSize: "4rem",
 	color: theme.palette.text.primary,
 }));
@@ -54,10 +51,4 @@ const CloseIconButton = styled(IconButton)(() => ({
 	right: 10,
 }));
 
-export {
-	SearchBoxContainer,
-	SearchField,
-	SearchButton,
-	CloseButton,
-	CloseIconButton,
-};
+export { SearchBoxContainer, SearchField, SearchButton, CloseButton, CloseIconButton };

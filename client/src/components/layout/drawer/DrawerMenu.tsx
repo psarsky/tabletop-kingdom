@@ -1,4 +1,3 @@
-import { Fragment } from "react/jsx-runtime";
 import { Link } from "react-router-dom";
 import { Drawer } from "@mui/material";
 
@@ -11,10 +10,10 @@ import {
 } from "../../../styles/layout/DrawerStyle";
 import { useUIContext } from "../../../context/UIContext";
 
-function DrawerMenu() {
+function DrawerMenu(): JSX.Element {
 	const { drawerOpen, setDrawerOpen } = useUIContext();
 	return (
-		<Fragment>
+		<>
 			{drawerOpen && (
 				<DrawerCloseButton onClick={() => setDrawerOpen(false)}>
 					<CloseIconButton />
@@ -22,40 +21,24 @@ function DrawerMenu() {
 			)}
 			<Drawer open={drawerOpen}>
 				<ButtonContainer>
-					<DrawerButton
-						onClick={() => setDrawerOpen(false)}
-						component={Link}
-						to="/"
-					>
+					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/">
 						Home
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
-					<DrawerButton
-						onClick={() => setDrawerOpen(false)}
-						component={Link}
-						to="/products"
-					>
+					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/products">
 						Products
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
-					<DrawerButton
-						onClick={() => setDrawerOpen(false)}
-						component={Link}
-						to="/categories"
-					>
+					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/categories">
 						Categories
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
-					<DrawerButton
-						onClick={() => setDrawerOpen(false)}
-						component={Link}
-						to="/user"
-					>
+					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/user">
 						Account
 					</DrawerButton>
 				</ButtonContainer>
 			</Drawer>
-		</Fragment>
+		</>
 	);
 }
 

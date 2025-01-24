@@ -1,13 +1,15 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, styled, Typography, Theme } from "@mui/material";
 
-import theme from "../../util/theme";
-
-const ItemSliderContainer = styled(Box)(() => ({
-	background: theme.palette.secondary.main,
+const centeredFlex = {
 	display: "flex",
-	flexDirection: "column",
-	justifyContent: "center",
 	alignItems: "center",
+	justifyContent: "center",
+};
+
+const ItemSliderContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
+	background: theme.palette.secondary.main,
+	...centeredFlex,
+	flexDirection: "column",
 	width: "90%",
 	maxWidth: "1200px",
 	height: "100%",
@@ -16,7 +18,7 @@ const ItemSliderContainer = styled(Box)(() => ({
 	borderRadius: "10px",
 }));
 
-const SliderTitle = styled(Typography)(() => ({
+const SliderTitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	fontSize: "36px",
 	color: theme.palette.text.primary,
 	lineHeight: 1.5,
@@ -28,23 +30,21 @@ const SliderTitle = styled(Typography)(() => ({
 
 const SliderControlContainer = styled(Box)(() => ({
 	display: "flex",
+	justifyContent: "space-between",
 	alignItems: "center",
-    justifyContent: "space-between",
-    gap: "20px",
+	gap: "20px",
 	width: "100%",
 	height: "100%",
 	padding: "0px 20px",
 }));
 
 const SlideContainer = styled(Box)(() => ({
-    display: "flex", 
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    overflow: "hidden",
-}))
+	...centeredFlex,
+	width: "100%",
+	overflow: "hidden",
+}));
 
-const MessageText = styled(Typography)(() => ({
+const MessageText = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	color: theme.palette.text.primary,
 }));
 

@@ -1,6 +1,5 @@
 import { IconButton, Slide } from "@mui/material";
 
-import { useUIContext } from "../../../context/UIContext";
 import {
 	CloseButton,
 	CloseIconButton,
@@ -8,18 +7,14 @@ import {
 	SearchButton,
 	SearchField,
 } from "../../../styles/layout/SearchBoxStyle";
+import { useUIContext } from "../../../context/UIContext";
 
-function SearchBox() {
+function SearchBox(): JSX.Element {
 	const { showSearchBox, setShowSearchBox } = useUIContext();
-
 	return (
 		<Slide direction="down" in={showSearchBox} timeout={500}>
 			<SearchBoxContainer>
-				<SearchField
-					variant="standard"
-					fullWidth
-					placeholder="Search..."
-				/>
+				<SearchField variant="standard" fullWidth placeholder="Search..." />
 				<IconButton>
 					<SearchButton />
 				</IconButton>

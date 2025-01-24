@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 
 import ContentContainer from "../styles/layout/ContentContainer";
 
-function User() {
+function User(): JSX.Element {
 	return (
 		<ContentContainer>
 			<Typography variant="h1">User</Typography>

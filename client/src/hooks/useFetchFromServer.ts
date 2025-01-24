@@ -2,26 +2,23 @@ import { useEffect } from "react";
 
 import { FetchProps } from "../util/interfaces";
 
-function useFetchFromServer(props: FetchProps) {
-	const { url, dependencies, onFetch, timeout } = props;
+function useFetchFromServer<T>(props: FetchProps<T>): void {
+	const { url, dependencies = [], onFetch, timeout = 0 } = props;
+
 	useEffect(() => {
-		const fetchFromServer = async () => {
+		const fetchFromServer = async (): Promise<void> => {
 			fetch(url)
 				.then((res: Response) => res.json())
-				.then((data: any) => {
+				.then((data: T) => {
 					console.log("Fetched:", data);
-					if (onFetch) {
-						onFetch(data);
-					}
+					if (onFetch) onFetch(data);
 				})
-				.catch((error) => {
+				.catch((error: any) => {
 					console.error("Error while fetching data:", error);
 				});
 		};
-
-		setTimeout(() => {
-			fetchFromServer();
-		}, timeout);
+		const timer: number = setTimeout(fetchFromServer, timeout);
+		return () => clearTimeout(timer);
 	}, dependencies);
 }
 

@@ -15,11 +15,11 @@ export interface ProductInterface {
 	id: number;
 	title: string;
 	price: number;
-	description: string;
+	description?: string;
 	category: string;
 	thumbnail: string;
-	rating: number;
-	count: number;
+	rating?: number;
+	count?: number;
 	stock: number;
 }
 
@@ -33,9 +33,29 @@ export interface ReviewInterface {
 	updatedAt: string;
 }
 
-export interface FetchProps {
+export interface UserInterface {
+	id: number;
+	username: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	address: string;
+	postalCode: string;
+	city: string;
+	phone?: string;
+	role: "user" | "admin";
+}
+
+export interface UIContextType {
+	drawerOpen: boolean;
+	setDrawerOpen: (open: boolean) => void;
+	showSearchBox: boolean;
+	setShowSearchBox: (open: boolean) => void;
+}
+
+export interface FetchProps<T> {
 	url: string;
-	dependencies?: any[];
-	onFetch?: (data: any) => void;
-	timeout: number;
+	dependencies?: React.DependencyList;
+	onFetch?: (data: T) => void;
+	timeout?: number;
 }

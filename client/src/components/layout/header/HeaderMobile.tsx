@@ -1,24 +1,21 @@
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
+import { Menu, Search } from "@mui/icons-material";
 
-import {
-	HeaderContainer,
-	Title,
-	IconBtn,
-	MenuButton,
-} from "../../../styles/layout/HeaderStyle";
+import { HeaderContainer, Title, IconBtn, MenuButton } from "../../../styles/layout/HeaderStyle";
 import Actions from "./Actions";
 import { useUIContext } from "../../../context/UIContext";
 
 function HeaderMobile(props: { matches: boolean }): JSX.Element {
 	const { setDrawerOpen, setShowSearchBox } = useUIContext();
 
+	const IconButton: React.FC<{
+		onClick: () => void;
+		icon: React.ReactNode;
+	}> = ({ onClick, icon }) => <IconBtn onClick={onClick}>{icon}</IconBtn>;
+
 	return (
 		<HeaderContainer>
-			<IconBtn onClick={() => setDrawerOpen(true)}>
-				<MenuIcon />
-			</IconBtn>
+			<IconButton onClick={() => setDrawerOpen(true)} icon={<Menu />} />
 			<MenuButton component={Link} to="/">
 				<Title>
 					Tabletop
@@ -26,9 +23,7 @@ function HeaderMobile(props: { matches: boolean }): JSX.Element {
 					Kingdom
 				</Title>
 			</MenuButton>
-			<IconBtn onClick={() => setShowSearchBox(true)}>
-				<SearchIcon />
-			</IconBtn>
+			<IconButton onClick={() => setShowSearchBox(true)} icon={<Search />} />
 			<Actions matches={props.matches} />
 		</HeaderContainer>
 	);

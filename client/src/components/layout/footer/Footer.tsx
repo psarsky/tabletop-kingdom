@@ -1,9 +1,5 @@
 import { Box, List, ListItemText, Typography } from "@mui/material";
-import { Copyright } from "@mui/icons-material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import YouTubeIcon from "@mui/icons-material/YouTube";
+import { Copyright, Facebook, Instagram, Twitter, YouTube } from "@mui/icons-material";
 
 import {
 	CopyrightElement,
@@ -15,25 +11,25 @@ import {
 	InfoList,
 } from "../../../styles/layout/FooterStyle";
 
-function Footer() {
+function Footer(): JSX.Element {
+	const iconStyle: { mr: number } = { mr: 6 };
+	const currentYear: number = new Date().getFullYear();
 	return (
 		<FooterContainer>
 			<FooterInfoSectionContainer>
 				<InfoList>
 					<FooterTitle variant="body1">About us</FooterTitle>
 					<Typography variant="caption">
-						Step into our online board game store—a true realm of
-						adventure where every enthusiast can find their perfect
-						match. From quick, family-friendly titles to deep,
-						strategic epics for seasoned gamers, we guarantee a wide
-						selection, great prices, and fast shipping. Let the fun
-						begin!
+						Step into our online board game store—a true realm of adventure where every
+						enthusiast can find their perfect match. From quick, family-friendly titles
+						to deep, strategic epics for seasoned gamers, we guarantee a wide selection,
+						great prices, and fast shipping. Let the fun begin!
 					</Typography>
 					<Box sx={{ mt: 4 }}>
-						<FacebookIcon sx={{ mr: 6 }} />
-						<InstagramIcon sx={{ mr: 6 }} />
-						<TwitterIcon sx={{ mr: 6 }} />
-						<YouTubeIcon />
+						<Facebook sx={iconStyle} />
+						<Instagram sx={iconStyle} />
+						<Twitter sx={iconStyle} />
+						<YouTube />
 					</Box>
 				</InfoList>
 				<InfoContainer>
@@ -101,8 +97,7 @@ function Footer() {
 			</FooterInfoSectionContainer>
 			<FooterDivider orientation="horizontal" flexItem />
 			<CopyrightElement variant="body1">
-				<Copyright sx={{ mr: 0.5 }} /> {new Date().getFullYear()}
-				{": "}Tabletop Kingdom
+				<Copyright sx={{ mr: 0.5 }} /> {currentYear}: Tabletop Kingdom
 			</CopyrightElement>
 		</FooterContainer>
 	);
