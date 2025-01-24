@@ -1,10 +1,15 @@
+/**
+ * todo:
+ * typing, style
+ */
+
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Typography, Button, TextField, CardContent, Rating, Alert } from "@mui/material";
+import { Params, useParams } from "react-router-dom";
+import { Typography, TextField, CardContent, Rating } from "@mui/material";
 
 import fetchFromServer from "../../hooks/fetchFromServer";
-import { ProductInterface, ReviewInterface } from "../../util/interfaces";
-import { ContentFill } from "../../styles/layout/ContentContainer";
+import { OrderItemInterface, ProductInterface, ReviewInterface } from "../../util/interfaces";
+import { ContentContainer, ContentFill } from "../../styles/layout/ContentContainer";
 import {
 	ProductContainer,
 	ProductContent,
@@ -19,51 +24,27 @@ import {
 	ReviewContainer,
 	ReviewList,
 	ReviewItem,
+	MessageText,
+	CenteredContainer,
+	ReviewForm,
+	ReviewSubmitButton,
 } from "../../styles/products/SingleProductViewStyle";
 
-const addReview = async (productId: string, reviewContent: string): Promise<void> => {
-	const response = await fetch(`http://localhost:3000/products/id/${productId}/reviews`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ content: reviewContent }),
-	});
-
-	if (!response.ok) {
-		throw new Error(response.statusText);
-	}
-};
-
-const addToCart = (productId: string): void => {
-	const cart = JSON.parse(localStorage.getItem("cart") || "[]") as {
-		id: string;
-		quantity: number;
-	}[];
-
-	const existingItem = cart.find((item) => item.id === productId);
-
-	if (existingItem) {
-		existingItem.quantity += 1;
-	} else {
-		cart.push({ id: productId, quantity: 1 });
-	}
-
-	localStorage.setItem("cart", JSON.stringify(cart));
-};
-
-function ProductDetails(): JSX.Element {
+function SingleProductView(): JSX.Element {
 	const { id } = useParams<{ id: string }>();
-	const [product, setProduct] = useState<ProductInterface | null>(null);
-	const [reviews, setReviews] = useState<ReviewInterface[] | []>([]);
-	const [review, setReview] = useState("");
-	const [error, setError] = useState("");
-	const params = useParams();
+	const [product, setProduct] = useState<ProductInterface>();
+	const [reviews, setReviews] = useState<ReviewInterface[]>([]);
+	const [review, setReview] = useState<string>("");
+	const [userRating, setRating] = useState<number>(0);
+	const [noItemsMessage, setNoItemsMessage] = useState<string>("Loading...");
+	const [noReviewsMessage, setNoReviewsMessage] = useState<string>("Loading...");
+	const params: Readonly<Params<string>> = useParams();
 
 	fetchFromServer({
 		url: `http://localhost:3000/products/id/${params.id}`,
 		onFetch: (data: ProductInterface) => {
 			setProduct(data);
+			setNoItemsMessage("Item not found.");
 		},
 		timeout: 1000,
 	});
@@ -71,52 +52,95 @@ function ProductDetails(): JSX.Element {
 	fetchFromServer({
 		url: `http://localhost:3000/products/id/${params.id}/reviews`,
 		onFetch: (data: ReviewInterface[]) => {
-			setReviews(data);
+			setReviews(Array.isArray(data) ? data : []);
+			setNoReviewsMessage("No reviews found.");
 		},
 		timeout: 1000,
 	});
 
+	const addReview = async (reviewContent: string, rating: number): Promise<void> => {
+		const response = await fetch(`http://localhost:3000/products/id/${id}/reviews`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ content: reviewContent, rating }),
+		});
+
+		if (!response.ok) {
+			setReview("");
+			setRating(0);
+			throw new Error(response.statusText);
+		}
+	};
+
+	const addToCart = (): void => {
+		const cart = JSON.parse(localStorage.getItem("cart") || "[]") as OrderItemInterface[];
+
+		const existingItem = cart.find(
+			(item: OrderItemInterface) => item.productId === parseInt(id!)
+		);
+
+		if (existingItem) {
+			existingItem.quantity += 1;
+		} else {
+			cart.push({ productId: parseInt(id!), quantity: 1, price: product!.price });
+		}
+
+		localStorage.setItem("cart", JSON.stringify(cart));
+	};
+
 	const handleAddToCart = () => {
 		try {
-			addToCart(id!);
+			addToCart();
 			alert("Product added to cart!");
-		} catch (error) {
-			setError("Error adding product to cart.");
+		} catch (error: any) {
+			alert("Error adding product to cart.");
 		}
 	};
 
 	const handleReviewTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setReview(e.target.value);
 
+	const handleRatingChange = (_: React.SyntheticEvent<Element, Event>, newValue: number | null) =>
+		setRating(newValue || 0);
+
 	const handleReviewSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (review.trim()) {
-			addReview(id!, review)
+			addReview(review, userRating)
 				.then(() => {
 					setReview("");
+					setRating(0);
 					alert("Review submitted!");
 				})
-				.catch((error) => setError("Error submitting review: " + error.message));
+				.catch((error: any) => alert("Error submitting review: " + error.message));
 		} else {
-			setError("Review cannot be empty.");
+			setRating(0);
+			alert("Review cannot be empty.");
 		}
 	};
-
-	if (error)
-		return (
-			<ContentFill>
-				<Alert severity="error">{error}</Alert>
-			</ContentFill>
-		);
 
 	if (!product)
 		return (
 			<ContentFill>
-				<Typography variant="h2">No product to show</Typography>
+				<Typography variant="h2">{noItemsMessage}</Typography>
 			</ContentFill>
 		);
 
 	const { title, thumbnail, price, description, stock, rating } = product;
+
+	const reviewList = reviews.map((review: ReviewInterface) => (
+		<ReviewItem key={review.id}>
+			<CardContent>
+				<Rating value={review.rating} readOnly precision={0.5} />
+				<Typography variant="body1">{review.comment}</Typography>
+				<Typography variant="caption">- {review.name}</Typography>
+			</CardContent>
+		</ReviewItem>
+	));
+
+	const roundedRating: number | "_" = product.rating ? Math.round(product.rating * 10) / 10 : "_";
 
 	return (
 		<ProductContainer>
@@ -131,34 +155,43 @@ function ProductDetails(): JSX.Element {
 					<ProductDesctiption>{description}</ProductDesctiption>
 					<ProductDivider orientation="horizontal" flexItem />
 					<JustifiedContainer>
-						<Rating value={rating} readOnly precision={0.5} />
-						<ProductDesctiption>In stock: {stock}</ProductDesctiption>
-						<CartButton
-							variant="contained"
-							color="primary"
-							disabled={product.stock <= 0}
-							onClick={handleAddToCart}
-						>
-							Add to cart
-						</CartButton>
+						<CenteredContainer>
+							<Rating value={rating} readOnly precision={0.5} />
+							<ProductDesctiption>{roundedRating} / 5</ProductDesctiption>
+						</CenteredContainer>
+						<CenteredContainer>
+							<ProductDesctiption>In stock: {stock}</ProductDesctiption>
+							<CartButton
+								variant="contained"
+								color="primary"
+								disabled={product.stock <= 0}
+								onClick={handleAddToCart}
+							>
+								Add to cart
+							</CartButton>
+						</CenteredContainer>
 					</JustifiedContainer>
 				</ProductDetailsContainer>
 			</ProductContent>
 			<ReviewContainer>
 				<ProductName>Reviews</ProductName>
 				<ReviewList>
-					{Array.isArray(reviews) &&
-						reviews.map((rev) => (
-							<ReviewItem key={rev.id}>
-								<CardContent>
-									<Rating value={rev.rating} readOnly precision={0.5} />
-									<Typography variant="body1">{rev.comment}</Typography>
-									<Typography variant="caption">- {rev.name}</Typography>
-								</CardContent>
-							</ReviewItem>
-						))}
+					{reviews.length > 0 ? (
+						reviewList
+					) : (
+						<ContentContainer>
+							<MessageText sx={{ mb: "20px" }}>{noReviewsMessage}</MessageText>
+						</ContentContainer>
+					)}
 				</ReviewList>
-				<form onSubmit={handleReviewSubmit} style={{ marginTop: "20px" }}>
+				<ReviewForm component="form" onSubmit={handleReviewSubmit}>
+					<Rating
+						value={userRating}
+						onChange={handleRatingChange}
+						precision={0.5}
+						size="large"
+						style={{ marginBottom: "10px" }}
+					/>
 					<TextField
 						label="Add a Review"
 						variant="outlined"
@@ -168,18 +201,13 @@ function ProductDetails(): JSX.Element {
 						multiline
 						rows={3}
 					/>
-					<Button
-						type="submit"
-						variant="contained"
-						color="secondary"
-						style={{ marginTop: "10px" }}
-					>
+					<ReviewSubmitButton type="submit" variant="contained" color="secondary">
 						Submit Review
-					</Button>
-				</form>
+					</ReviewSubmitButton>
+				</ReviewForm>
 			</ReviewContainer>
 		</ProductContainer>
 	);
 }
 
-export default ProductDetails;
+export default SingleProductView;

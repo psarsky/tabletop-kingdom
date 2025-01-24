@@ -9,6 +9,8 @@ import {
 	Typography,
 	Theme,
 	Container,
+    FormControl,
+    FormControlProps
 } from "@mui/material";
 
 const centeredFlex = {
@@ -65,6 +67,11 @@ const JustifiedContainer = styled(Box)(() => ({
 	width: "100%",
 }));
 
+const CenteredContainer = styled(Box)(() => ({
+    ...centeredFlex,
+    gap: "20px",
+}));
+
 const ProductDivider = styled(Divider)(({ theme }: { theme: Theme }) => ({
 	backgroundColor: theme.palette.text.primary,
 }));
@@ -86,13 +93,27 @@ const ReviewList = styled(Box)(() => ({
 	...centeredFlex,
 	flexDirection: "column",
 	gap: "10px",
-	minWidth: "500px",
+	minWidth: "800px",
 }));
 
 const ReviewItem = styled(Card)(({ theme }: { theme: Theme }) => ({
 	background: theme.palette.secondary.main,
 	margin: "10px 0",
 	width: "100%",
+}));
+
+const ReviewForm = styled(FormControl)<FormControlProps>(() => ({
+    marginTop: "20px",
+    width: "100%",
+    maxWidth: "800px"
+}))
+
+const ReviewSubmitButton = styled(Button)(({ theme }: { theme: Theme }) => ({
+    color: theme.palette.text.primary, marginTop: "10px" 
+}))
+
+const MessageText = styled(Typography)(({ theme }: { theme: Theme }) => ({
+	color: theme.palette.text.primary,
 }));
 
 export {
@@ -105,8 +126,12 @@ export {
 	ProductDesctiption,
 	ProductDivider,
 	CartButton,
-	JustifiedContainer,
+    JustifiedContainer,
+    CenteredContainer,
 	ReviewContainer,
 	ReviewList,
-	ReviewItem,
+    ReviewItem,
+    ReviewForm,
+    ReviewSubmitButton,
+    MessageText
 };

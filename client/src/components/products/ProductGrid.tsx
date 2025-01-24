@@ -9,7 +9,8 @@ import ProductCard from "./ProductCard";
 import { ProductSearchContext } from "../../context/ProductSearchContext";
 
 function ProductGrid() {
-	const [products, setProducts] = useState<ProductInterface[]>([]);
+    const [products, setProducts] = useState<ProductInterface[]>([]);
+    const [noItemsMessage, setNoItemsMessage] = useState<string>("Loading...");
 	const productSearchContext = useContext(ProductSearchContext);
 	if (productSearchContext === undefined) {
 		throw new Error("SearchContext must be used within a SearchProvider");
@@ -23,7 +24,8 @@ function ProductGrid() {
 		url: `http://localhost:3000/products?&page=1&limit=10&${queryString.toString()}`,
 		timeout: 1000,
 		onFetch: (data: ProductInterface[]) => {
-			setProducts(data);
+            setProducts(data);
+            setNoItemsMessage("No items found.");
 		},
 		dependencies: [query],
 	});
@@ -48,7 +50,7 @@ function ProductGrid() {
 					productGrid
 				) : (
 					<ContentFill>
-						<MessageText sx={{ mb: "20px" }}>No items to show</MessageText>
+                            <MessageText sx={{ mb: "20px" }}>{noItemsMessage}</MessageText>
 					</ContentFill>
 				)}
 			</GridContainer>
