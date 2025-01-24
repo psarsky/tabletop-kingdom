@@ -1,10 +1,10 @@
+import { Op } from "sequelize";
 import { database, Product } from "../models/init.js";
 
 const addProduct = async (req, res) => {
 	try {
 		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
-		const { title, price, description, category, image, rating, stock } =
-			req.body;
+		const { title, price, description, category, image, rating, stock } = req.body;
 		if (!title || !price || !category || !image || !stock) {
 			return res.status(400).json({
 				error: `Required fields are missing: ${
@@ -39,12 +39,11 @@ const addProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-    try {
-        if (req.user.role !== "admin") return res.status(403).send("Forbidden");
+	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const product = await Product.findByPk(req.params.id);
 		if (!product) return res.status(404).send("Product not found");
-		const { title, price, description, category, image, rating, stock } =
-			req.body;
+		const { title, price, description, category, image, rating, stock } = req.body;
 		if (!title && !price && !description && !category && !image && !stock) {
 			return res.status(400).send("No fields to update");
 		}
@@ -67,14 +66,12 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-    try {
-        if (req.user.role !== "admin") return res.status(403).send("Forbidden");
+	try {
+		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const product = await Product.findByPk(req.params.id);
 		if (!product) return res.status(404).send("Product not found");
 		await product.destroy();
-		await database.query(
-			"DELETE FROM sqlite_sequence WHERE name='Products'"
-		);
+		await database.query("DELETE FROM sqlite_sequence WHERE name='Products'");
 		return res.status(200).send("Product deleted");
 	} catch (error) {
 		return res.status(500).json({
@@ -95,9 +92,35 @@ const getProductById = async (req, res) => {
 	}
 };
 
-const getProducts = async (_, res) => {
+const getProducts = async (req, res) => {
+	const {
+		limit = 15,
+		page = 1,
+		search,
+		category
+	} = req.query;
+
+	const where = {};
+	if (search) {
+		where.title = {
+			[Op.iLike]: `%${search}%`,
+		};
+	}
+	if (category && category !== "all") {
+		where.category = {
+			[Op.iLike]: `${category}%`,
+		};
+	}
+
+	const offset = (parseInt(page) - 1) * parseInt(limit);
+
 	try {
-		const products = await Product.findAll();
+		const products = await Product.findAll({
+			where,
+			limit: parseInt(limit),
+			offset,
+		});
+
 		return res.status(200).json(products);
 	} catch (error) {
 		return res.status(500).json({
@@ -121,7 +144,7 @@ const getCategories = async (_, res) => {
 };
 
 const fillDatabase = async (req, res) => {
-    if (req.user.role !== "admin") return res.status(403).send("Forbidden");
+	if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 	fetch("https://dummyjson.com/products?limit=0")
 		.then((res) => res.json())
 		.then((data) => {
@@ -140,9 +163,7 @@ const fillDatabase = async (req, res) => {
 					return res.status(201).send("Database filled");
 				})
 				.catch((error) => {
-					return res
-						.status(500)
-						.send(`Error filling database: ${error.message}`);
+					return res.status(500).send(`Error filling database: ${error.message}`);
 				});
 		});
 };
