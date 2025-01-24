@@ -2,12 +2,12 @@ import { useEffect } from "react";
 
 import { FetchProps } from "../util/interfaces";
 
-function useFetchFromServer<T>(props: FetchProps<T>): void {
+function fetchFromServer<T>(props: FetchProps<T>): void {
     const { url, dependencies = [], onFetch, timeout = 0 } = props;
     console.log("Fetching data from:", url);
 
 	useEffect(() => {
-		const fetchFromServer = async (): Promise<void> => {
+		const fetchFromServerAsync = async (): Promise<void> => {
 			fetch(url)
 				.then((res: Response) => res.json())
 				.then((data: T) => {
@@ -18,9 +18,9 @@ function useFetchFromServer<T>(props: FetchProps<T>): void {
 					console.error("Error while fetching data:", error);
 				});
 		};
-		const timer: number = setTimeout(fetchFromServer, timeout);
+		const timer: number = setTimeout(fetchFromServerAsync, timeout);
 		return () => clearTimeout(timer);
 	}, dependencies);
 }
 
-export default useFetchFromServer;
+export default fetchFromServer;

@@ -26,7 +26,7 @@ export interface ProductInterface {
 export interface ReviewInterface {
 	id: number;
 	productId: number;
-	userId: number;
+	name: number;
 	rating: number;
 	comment: string;
 	createdAt: string;

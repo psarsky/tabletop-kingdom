@@ -11,7 +11,7 @@ import {
 } from "../../styles/home/ItemSliderStyle";
 import { IconBtn } from "../../styles/layout/HeaderStyle";
 import { ProductInterface } from "../../util/interfaces";
-import useFetchFromServer from "../../hooks/useFetchFromServer";
+import fetchFromServer from "../../hooks/fetchFromServer";
 import ProductCard from "../products/ProductCard";
 
 function ItemSlider(): JSX.Element {
@@ -19,7 +19,7 @@ function ItemSlider(): JSX.Element {
 	const [show, setShow] = useState<boolean>(true);
 	const [products, setProducts] = useState<ProductInterface[]>([]);
 
-	useFetchFromServer<ProductInterface[]>({
+	fetchFromServer<ProductInterface[]>({
 		url: "http://localhost:3000/products",
 		timeout: 1000,
 		onFetch: (data: ProductInterface[]) => {
