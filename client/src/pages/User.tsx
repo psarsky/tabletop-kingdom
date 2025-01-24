@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-import ContentContainer from "../styles/layout/ContentContainer";
+import { ContentContainer } from "../styles/layout/ContentContainer";
 
 function User(): JSX.Element {
 	return (

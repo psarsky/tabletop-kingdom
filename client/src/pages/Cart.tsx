@@ -1,14 +1,14 @@
 import { Typography } from "@mui/material";
 
-import ContentContainer from "../styles/layout/ContentContainer";
+import { ContentFill } from "../styles/layout/ContentContainer";
 
 function Cart(): JSX.Element {
 	const cart = localStorage.getItem("cart");
 
 	return (
-		<ContentContainer>
+		<ContentFill>
 			<Typography>{cart}</Typography>
-		</ContentContainer>
+		</ContentFill>
 	);
 }
 

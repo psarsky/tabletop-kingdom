@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Typography, Button, TextField, CardContent, Rating, Alert } from "@mui/material";
 
-import {
-	Container,
-	Grid2,
-	Typography,
-	Button,
-	TextField,
-	Card,
-	CardMedia,
-	CardContent,
-	CardActions,
-	Rating,
-	Alert,
-	useTheme,
-} from "@mui/material";
 import fetchFromServer from "../../hooks/fetchFromServer";
 import { ProductInterface, ReviewInterface } from "../../util/interfaces";
+import { ContentFill } from "../../styles/layout/ContentContainer";
+import {
+	ProductContainer,
+	ProductContent,
+	ProductDetailsContainer,
+	ProductImage,
+	ProductName,
+	ProductPrice,
+	ProductDesctiption,
+	JustifiedContainer,
+	CartButton,
+	ProductDivider,
+	ReviewContainer,
+	ReviewList,
+	ReviewItem,
+} from "../../styles/products/SingleProductViewStyle";
 
 const addReview = async (productId: string, reviewContent: string): Promise<void> => {
 	const response = await fetch(`http://localhost:3000/products/id/${productId}/reviews`, {
@@ -49,8 +52,7 @@ const addToCart = (productId: string): void => {
 	localStorage.setItem("cart", JSON.stringify(cart));
 };
 
-const ProductDetails: React.FC = () => {
-	const theme = useTheme();
+function ProductDetails(): JSX.Element {
 	const { id } = useParams<{ id: string }>();
 	const [product, setProduct] = useState<ProductInterface | null>(null);
 	const [reviews, setReviews] = useState<ReviewInterface[] | []>([]);
@@ -83,6 +85,9 @@ const ProductDetails: React.FC = () => {
 		}
 	};
 
+	const handleReviewTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		setReview(e.target.value);
+
 	const handleReviewSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (review.trim()) {
@@ -97,87 +102,84 @@ const ProductDetails: React.FC = () => {
 		}
 	};
 
-	if (error) return <Alert severity="error">{error}</Alert>;
+	if (error)
+		return (
+			<ContentFill>
+				<Alert severity="error">{error}</Alert>
+			</ContentFill>
+		);
 
-	if (!product) return null;
+	if (!product)
+		return (
+			<ContentFill>
+				<Typography variant="h2">No product to show</Typography>
+			</ContentFill>
+		);
 
 	const { title, thumbnail, price, description, stock, rating } = product;
 
 	return (
-		<Container>
-			<Grid2 container spacing={4}>
-				<Grid2>
-					<Card>
-						<CardMedia
-							component="img"
-							image={thumbnail}
-							alt={title}
-							sx={{ height: "500px", width: "500px" }}
-						/>
-					</Card>
-				</Grid2>
-				<Grid2>
-					<Typography variant="h4">{title}</Typography>
-					<Typography variant="h6" color="textSecondary">
-						${price.toFixed(2)}
-					</Typography>
-					<Typography variant="body1" paragraph>
-						{description}
-					</Typography>
-					<Typography variant="body2" color="textSecondary">
-						In stock: {stock}
-					</Typography>
-					<Rating value={rating} readOnly precision={0.5} />
-					<CardActions>
-						<Button variant="contained" color="primary" onClick={handleAddToCart}>
-							Add to Cart
-						</Button>
-					</CardActions>
-				</Grid2>
-			</Grid2>
-
-			<Typography variant="h5" marginTop={4}>
-				Reviews
-			</Typography>
-			{Array.isArray(reviews) &&
-				reviews.map((rev) => (
-					<Card
-						key={rev.id}
-						sx={{ bgcolor: theme.palette.secondary.main, margin: "10px 0" }}
+		<ProductContainer>
+			<ProductContent>
+				<ProductImage image={thumbnail} />
+				<ProductDetailsContainer>
+					<JustifiedContainer>
+						<ProductName>{title}</ProductName>
+						<ProductPrice>${price.toFixed(2)}</ProductPrice>
+					</JustifiedContainer>
+					<ProductDivider orientation="horizontal" flexItem />
+					<ProductDesctiption>{description}</ProductDesctiption>
+					<ProductDivider orientation="horizontal" flexItem />
+					<JustifiedContainer>
+						<Rating value={rating} readOnly precision={0.5} />
+						<ProductDesctiption>In stock: {stock}</ProductDesctiption>
+						<CartButton
+							variant="contained"
+							color="primary"
+							disabled={product.stock <= 0}
+							onClick={handleAddToCart}
+						>
+							Add to cart
+						</CartButton>
+					</JustifiedContainer>
+				</ProductDetailsContainer>
+			</ProductContent>
+			<ReviewContainer>
+				<ProductName>Reviews</ProductName>
+				<ReviewList>
+					{Array.isArray(reviews) &&
+						reviews.map((rev) => (
+							<ReviewItem key={rev.id}>
+								<CardContent>
+									<Rating value={rev.rating} readOnly precision={0.5} />
+									<Typography variant="body1">{rev.comment}</Typography>
+									<Typography variant="caption">- {rev.name}</Typography>
+								</CardContent>
+							</ReviewItem>
+						))}
+				</ReviewList>
+				<form onSubmit={handleReviewSubmit} style={{ marginTop: "20px" }}>
+					<TextField
+						label="Add a Review"
+						variant="outlined"
+						fullWidth
+						value={review}
+						onChange={handleReviewTextChange}
+						multiline
+						rows={3}
+					/>
+					<Button
+						type="submit"
+						variant="contained"
+						color="secondary"
+						style={{ marginTop: "10px" }}
 					>
-						<CardContent>
-							<Typography variant="body1">{rev.comment}</Typography>
-							<Typography
-								variant="caption"
-								sx={{ bgcolor: theme.palette.secondary.main }}
-							>
-								- {rev.name}
-							</Typography>
-						</CardContent>
-					</Card>
-				))}
-
-			<form onSubmit={handleReviewSubmit} style={{ marginTop: "20px" }}>
-				<TextField
-					label="Add a Review"
-					variant="outlined"
-					fullWidth
-					value={review}
-					onChange={(e) => setReview(e.target.value)}
-					multiline
-					rows={3}
-				/>
-				<Button
-					type="submit"
-					variant="contained"
-					color="secondary"
-					style={{ marginTop: "10px" }}
-				>
-					Submit Review
-				</Button>
-			</form>
-		</Container>
+						Submit Review
+					</Button>
+				</form>
+			</ReviewContainer>
+		</ProductContainer>
 	);
-};
+}
 
 export default ProductDetails;

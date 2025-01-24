@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import { ProductInterface } from "../../util/interfaces";
 import fetchFromServer from "../../hooks/fetchFromServer";
 import { GridContainer, MessageText } from "../../styles/products/ProductGridStyle";
-import ContentContainer from "../../styles/layout/ContentContainer";
+import { ContentContainer, ContentFill } from "../../styles/layout/ContentContainer";
 import ProductCard from "./ProductCard";
 import { ProductSearchContext } from "../../context/ProductSearchContext";
 
@@ -44,9 +44,13 @@ function ProductGrid() {
 					: "All Products"}
 			</Typography>
 			<GridContainer container spacing={2}>
-                {products.length > 0
-                    ? productGrid
-                    : <MessageText sx={{ mb: "20px" }}>No items to show</MessageText>}
+                {products.length > 0 ? (
+					productGrid
+				) : (
+					<ContentFill>
+						<MessageText sx={{ mb: "20px" }}>No items to show</MessageText>
+					</ContentFill>
+				)}
 			</GridContainer>
 		</ContentContainer>
 	);
