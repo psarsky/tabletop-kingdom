@@ -1,4 +1,11 @@
-import { Box, IconButton, styled, TextField, Theme } from "@mui/material";
+import {
+	Box,
+	FormControl,
+	IconButton,
+	styled,
+	TextField,
+	Theme,
+} from "@mui/material";
 import { Search, Close } from "@mui/icons-material";
 
 const SearchBoxContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
@@ -20,11 +27,8 @@ const SearchField = styled(TextField)(({ theme }: { theme: Theme }) => ({
 		color: theme.palette.text.primary,
 	},
 	"& .MuiInput-root": {
-		fontSize: "1rem",
 		color: theme.palette.text.primary,
-		[theme.breakpoints.up("md")]: {
-			fontSize: "2rem",
-		},
+		fontSize: "2rem",
 	},
 	"& .MuiInput-root:before": {
 		borderBottom: `1px solid ${theme.palette.text.primary}`,
@@ -51,4 +55,25 @@ const CloseIconButton = styled(IconButton)(() => ({
 	right: 10,
 }));
 
-export { SearchBoxContainer, SearchField, SearchButton, CloseButton, CloseIconButton };
+const CategorySelector = styled(FormControl)(({ theme }: { theme: Theme }) => ({
+	width: "200px",
+	"& .MuiInputLabel-root": {
+		color: theme.palette.text.primary,
+	},
+	"& .MuiInput-root": {
+		color: theme.palette.text.primary,
+		fontSize: "1.3rem",
+	},
+	"& .MuiInput-root:before": {
+		borderBottom: `1px solid ${theme.palette.text.primary}`,
+	},
+}));
+
+export {
+	SearchBoxContainer,
+	SearchField,
+	SearchButton,
+	CloseButton,
+	CloseIconButton,
+	CategorySelector,
+};

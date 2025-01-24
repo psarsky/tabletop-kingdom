@@ -27,7 +27,6 @@ function ItemSlider(): JSX.Element {
 			let random: ProductInterface[] = data.sort(() => 0.5 - Math.random()).slice(0, 5);
 			setProducts(random);
 		},
-		dependencies: [],
 	});
 
 	const handleNext = () => {
