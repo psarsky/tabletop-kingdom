@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import { database, Product } from "../models/init.js";
 
 const addProduct = async (req, res) => {
@@ -98,21 +98,29 @@ const getProducts = async (req, res) => {
 		page = 1,
 		search,
 		category
-	} = req.query;
+    } = req.query;
+    
+    console.log(limit, page, search, category);
 
 	const where = {};
 	if (search) {
-		where.title = {
-			[Op.iLike]: `%${search}%`,
-		};
+		where.title = Sequelize.where(
+			Sequelize.fn("LOWER", Sequelize.col("title")),
+			"LIKE",
+			`%${search.toLowerCase()}%`
+		);
 	}
 	if (category && category !== "all") {
-		where.category = {
-			[Op.iLike]: `${category}%`,
-		};
+		where.category = Sequelize.where(
+			Sequelize.fn("LOWER", Sequelize.col("category")),
+			"LIKE",
+			`${category.toLowerCase()}%`
+		);
 	}
 
-	const offset = (parseInt(page) - 1) * parseInt(limit);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    
+    console.log(offset, where);
 
 	try {
 		const products = await Product.findAll({
