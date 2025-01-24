@@ -1,14 +1,12 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, styled, Typography, Theme } from "@mui/material";
 
-import theme from "../../util/theme";
-
-const BannerContainer = styled(Box)(() => ({
+const BannerContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
 	background: theme.palette.secondary.main,
 	display: "flex",
-    justifyContent: "space-between",
-    gap: "30px",
-    width: "90%",
-    maxWidth: "1200px",
+	justifyContent: "space-between",
+	gap: "30px",
+	width: "90%",
+	maxWidth: "1200px",
 	height: "100%",
 	padding: "30px 30px",
 	margin: "30px 0px",
@@ -19,22 +17,19 @@ const BannerContainer = styled(Box)(() => ({
 	},
 }));
 
-const BannerImage = styled(`img`)((props: { src: string }) => ({
-	src: `url(${props.src})`,
-    width: "400px",
-    height: "400px",
+const BannerImage = styled("img")(() => ({
+	width: "400px",
+	height: "400px",
 	borderRadius: "10px",
 }));
 
-const BannerImageM = styled(`img`)((props: { src: string }) => ({
-	src: `url(${props.src})`,
-    width: "300px",
-    height: "300px",
+const BannerImageM = styled("img")(() => ({
+	width: "300px",
+	height: "300px",
 	borderRadius: "10px",
 }));
 
-const BannerImageS = styled(`img`)((props: { src: string }) => ({
-	src: `url(${props.src})`,
+const BannerImageS = styled("img")(() => ({
 	width: "300px",
 	height: "300px",
 	borderRadius: "10px",
@@ -47,23 +42,22 @@ const BannerContent = styled(Box)(() => ({
 	maxWidth: 700,
 }));
 
-const BannerTitle = styled(Typography)(() => ({
-	fontSize: "36px",
+const BannerTitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
+	...theme.typography.h4,
 	color: theme.palette.text.primary,
 	lineHeight: 1.5,
 	marginBottom: "20px",
 	[theme.breakpoints.down("md")]: {
-		fontSize: "24px",
+		...theme.typography.h5,
 	},
 }));
 
-const BannerDescription = styled(Typography)(() => ({
+const BannerDescription = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	color: theme.palette.text.primary,
 	lineHeight: 1.25,
-	lineSpacing: 1.25,
+	margin: "10px 0",
 	[theme.breakpoints.down("md")]: {
 		lineHeight: 1.15,
-		lineSpacing: 1.15,
 	},
 }));
 

@@ -1,11 +1,10 @@
-import { Typography } from "@mui/material";
-
 import ContentContainer from "../styles/layout/ContentContainer";
+import ProductGrid from "../components/products/ProductGrid";
 
-function Products() {
+function Products(): JSX.Element {
 	return (
 		<ContentContainer>
-			<Typography variant="h1">Products</Typography>
+			<ProductGrid />
 		</ContentContainer>
 	);
 }

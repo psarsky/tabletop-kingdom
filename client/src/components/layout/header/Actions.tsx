@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PersonIcon from "@mui/icons-material/Person";
+import { ReceiptLong, ShoppingCart, Person } from "@mui/icons-material";
 
 import {
 	MyList,
@@ -13,31 +11,28 @@ import {
 } from "../../../styles/layout/HeaderStyle";
 
 function Actions(props: { matches: boolean }): JSX.Element {
-	const Component = props.matches
-		? ActionIconsContainerMobile
-		: ActionIconsContainerDesktop;
+	const Component: React.FC<{
+		children: React.ReactNode;
+	}> = props.matches ? ActionIconsContainerMobile : ActionIconsContainerDesktop;
+
+	const NavigationButton: React.FC<{
+		to: string;
+		Icon: JSX.Element;
+	}> = ({ to, Icon }) => (
+		<ListButton component={Link} to={to}>
+			<ListIcon>{Icon}</ListIcon>
+		</ListButton>
+	);
 
 	return (
 		<Component>
 			<MyList type="row">
 				<MenuDivider orientation="vertical" flexItem />
-				<ListButton component={Link} to="/cart">
-					<ListIcon>
-						<ShoppingCartIcon />
-					</ListIcon>
-				</ListButton>
+				<NavigationButton to="/cart" Icon={<ShoppingCart />} />
 				<MenuDivider orientation="vertical" flexItem />
-				<ListButton component={Link} to="/orders">
-					<ListIcon>
-						<FavoriteIcon />
-					</ListIcon>
-				</ListButton>
+				<NavigationButton to="/orders" Icon={<ReceiptLong />} />
 				<MenuDivider orientation="vertical" flexItem />
-				<ListButton component={Link} to="/user">
-					<ListIcon>
-						<PersonIcon />
-					</ListIcon>
-				</ListButton>
+				<NavigationButton to="/user" Icon={<Person />} />
 				<MenuDivider orientation="vertical" flexItem />
 			</MyList>
 		</Component>

@@ -2,11 +2,11 @@ import Banner from "../components/home/Banner";
 import ItemSlider from "../components/home/ItemSlider";
 import ContentContainer from "../styles/layout/ContentContainer";
 
-const Home = () => {
+function Home(): JSX.Element {
 	return (
 		<ContentContainer>
-            <Banner />
-            <ItemSlider />
+			<Banner />
+			<ItemSlider />
 		</ContentContainer>
 	);
 };

@@ -7,11 +7,10 @@ import {
 	Divider,
 	styled,
 	Typography,
+	Theme,
 } from "@mui/material";
 
-import theme from "../../util/theme";
-
-const ProductCardContainer = styled(Card)(() => ({
+const ProductCardContainer = styled(Card)(({ theme }: { theme: Theme }) => ({
 	backgroundColor: theme.palette.primary.main,
 	color: theme.palette.text.primary,
 	display: "flex",
@@ -37,40 +36,38 @@ const ProductCardContainer = styled(Card)(() => ({
 	},
 }));
 
-const ProductCardContent = styled(Box)(() => ({
+const ProductCardContent = styled(Box)(({ theme }: { theme: Theme }) => ({
 	display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    margin: 0,
-    padding: 0,
-    [theme.breakpoints.up("lg")]: {
-        flexDirection: "row",
+	flexDirection: "column",
+	gap: "10px",
+	margin: 0,
+	padding: 0,
+	[theme.breakpoints.up("lg")]: {
+		flexDirection: "row",
 	},
 }));
 
-const ProductCardDividerBig = styled(Divider)(() => ({
+const ProductCardDividerBig = styled(Divider)(({ theme }: { theme: Theme }) => ({
 	backgroundColor: theme.palette.text.primary,
 }));
 
-const ProductCardImage = styled(CardMedia)(
-	(_props: { component: string; alt: string }) => ({
-		backgroundColor: "white",
-		width: "400px",
-		height: "400px",
-		[theme.breakpoints.down("sm")]: {
-			width: "200px",
-			height: "200px",
-		},
-		[theme.breakpoints.up("lg")]: {
-			width: "500px",
-			height: "500px",
-		},
-	})
-);
+const ProductCardImage = styled(CardMedia)(({ theme }: { theme: Theme }) => ({
+	backgroundColor: "white",
+	width: "400px",
+	height: "400px",
+	[theme.breakpoints.down("sm")]: {
+		width: "200px",
+		height: "200px",
+	},
+	[theme.breakpoints.up("lg")]: {
+		width: "500px",
+		height: "500px",
+	},
+}));
 
-const ProductDetailsContainer = styled(CardContent)(() => ({
+const ProductDetailsContainer = styled(CardContent)(({ theme }: { theme: Theme }) => ({
 	display: "flex",
-	justifyContent: "space-between",
+	justifyContent: "center",
 	alignItems: "center",
 	gap: "10px",
 	height: "100px",
@@ -78,25 +75,25 @@ const ProductDetailsContainer = styled(CardContent)(() => ({
 	[theme.breakpoints.down("sm")]: {
 		height: "50px",
 	},
-    [theme.breakpoints.up("lg")]: {
-        flexDirection: "column",
-        height: "500px",
+	[theme.breakpoints.up("lg")]: {
+		flexDirection: "column",
+		height: "500px",
 	},
 }));
 
-const ProductName = styled(Typography)(() => ({
+const ProductName = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	fontSize: "1.5rem",
 	[theme.breakpoints.down("sm")]: {
 		fontSize: "0.8rem",
 	},
 	[theme.breakpoints.up("lg")]: {
-        fontSize: "2rem",
-        alignSelf: "flex-start",
-        justifySelf: "center",
+		fontSize: "2rem",
+		alignSelf: "flex-start",
+		justifySelf: "center",
 	},
 }));
 
-const ProductPrice = styled(Typography)(() => ({
+const ProductPrice = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	textWrap: "nowrap",
 	fontWeight: "bold",
 	fontSize: "1.6rem",
@@ -109,27 +106,27 @@ const ProductPrice = styled(Typography)(() => ({
 	},
 }));
 
-const ProductDesctiption = styled(Typography)(() => ({
-    [theme.breakpoints.down("lg")]: {
-        display: "none",
-    },
-}))
+const ProductDesctiption = styled(Typography)(({ theme }: { theme: Theme }) => ({
+	[theme.breakpoints.down("lg")]: {
+		display: "none",
+	},
+}));
 
-const StockRatingContainer = styled(Box)(() => ({
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    [theme.breakpoints.down("lg")]: {
-        display: "none",
-    },
-}))
+const StockRatingContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
+	display: "flex",
+	justifyContent: "space-between",
+	alignItems: "center",
+	width: "100%",
+	[theme.breakpoints.down("lg")]: {
+		display: "none",
+	},
+}));
 
-const ProductCardDivider = styled(Divider)(() => ({
+const ProductCardDivider = styled(Divider)(({ theme }: { theme: Theme }) => ({
 	backgroundColor: theme.palette.text.primary,
 }));
 
-const CartButton = styled(Button)(() => ({
+const CartButton = styled(Button)(({ theme }: { theme: Theme }) => ({
 	color: theme.palette.text.primary,
 	height: "100px",
 	fontSize: "1.5rem",
