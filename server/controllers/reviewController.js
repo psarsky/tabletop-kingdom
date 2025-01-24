@@ -39,9 +39,7 @@ const deleteReview = async (req, res) => {
 		if (req.user.role !== "admin" && review.userId != req.user.id)
 			return res.status(403).send("Forbidden");
 		await review.destroy();
-		await database.query(
-			"DELETE FROM sqlite_sequence WHERE name='Reviews'"
-		);
+		await database.query("DELETE FROM sqlite_sequence WHERE name='Reviews'");
 		const [result] = await Review.findAll({
 			where: { productId: review.productId },
 			attributes: [
@@ -67,14 +65,22 @@ const deleteReview = async (req, res) => {
 
 const getReviewsByProductId = async (req, res) => {
 	try {
-		if (req.user.role !== "admin" && req.params.id != req.user.id)
-			return res.status(403).send("Forbidden");
 		const reviews = await Review.findAll({
 			where: { productId: req.params.id },
 		});
-		if (!reviews)
-			return res.status(404).json({ error: "Reviews not found" });
-		return res.status(200).json(reviews);
+		if (!reviews) return res.status(404).json({ error: "Reviews not found" });
+		const users = await User.findAll();
+		const reviewsWithUsers = reviews.map((review) => {
+			const user = users.find((user) => user.id === review.userId);
+			return {
+				id: review.id,
+				productId: review.productId,
+				name: user.firstName + " " + user.lastName,
+				rating: review.rating,
+				comment: review.comment,
+			};
+		});
+		return res.status(200).json(reviewsWithUsers);
 	} catch (error) {
 		return res.status(500).json({
 			error: `An unexpected error occurred while getting reviews: ${error.message}`,
@@ -89,8 +95,7 @@ const getReviewsByUserId = async (req, res) => {
 		const reviews = await Review.findAll({
 			where: { userId: req.params.userId },
 		});
-		if (reviews.length === 0)
-			return res.status(404).json({ error: "Reviews not found" });
+		if (reviews.length === 0) return res.status(404).json({ error: "Reviews not found" });
 		return res.status(200).json(reviews);
 	} catch (error) {
 		return res.status(500).json({
@@ -103,8 +108,7 @@ const getReviews = async (req, res) => {
 	try {
 		if (req.user.role !== "admin") return res.status(403).send("Forbidden");
 		const reviews = await Review.findAll();
-		if (!reviews)
-			return res.status(404).json({ error: "Reviews not found" });
+		if (!reviews) return res.status(404).json({ error: "Reviews not found" });
 		return res.status(200).json(reviews);
 	} catch (error) {
 		return res.status(500).json({
@@ -154,9 +158,7 @@ const fillDatabase = async (req, res) => {
 		}
 		return res.status(201).send("Database filled");
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ error: `Error filling database: ${error.message}` });
+		return res.status(500).json({ error: `Error filling database: ${error.message}` });
 	}
 };
 
