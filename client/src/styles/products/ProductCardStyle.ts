@@ -27,8 +27,8 @@ const ProductCardContainer = styled(Card)(({ theme }: { theme: Theme }) => ({
 		boxShadow: "0 0 12px rgba(0,0,0,1)",
 	},
 	[theme.breakpoints.down("sm")]: {
-		width: "200px",
-		height: "300px",
+		width: "250px",
+		height: "400px",
 	},
 	[theme.breakpoints.up("lg")]: {
 		width: "800px",
@@ -44,7 +44,7 @@ const ProductCardContent = styled(Box)(({ theme }: { theme: Theme }) => ({
 	padding: 0,
 	[theme.breakpoints.up("lg")]: {
 		flexDirection: "row",
-	},
+    },
 }));
 
 const ProductCardDividerBig = styled(Divider)(({ theme }: { theme: Theme }) => ({
@@ -56,8 +56,8 @@ const ProductCardImage = styled(CardMedia)(({ theme }: { theme: Theme }) => ({
 	width: "400px",
 	height: "400px",
 	[theme.breakpoints.down("sm")]: {
-		width: "200px",
-		height: "200px",
+		width: "250px",
+		height: "250px",
 	},
 	[theme.breakpoints.up("lg")]: {
 		width: "500px",
@@ -73,11 +73,12 @@ const ProductDetailsContainer = styled(CardContent)(({ theme }: { theme: Theme }
 	height: "100px",
 	overflow: "hidden",
 	[theme.breakpoints.down("sm")]: {
-		height: "50px",
+		height: "80px",
 	},
 	[theme.breakpoints.up("lg")]: {
 		flexDirection: "column",
 		height: "500px",
+		width: "300px",
 	},
 }));
 

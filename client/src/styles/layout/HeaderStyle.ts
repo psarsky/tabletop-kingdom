@@ -32,9 +32,9 @@ const Title = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	color: theme.palette.text.primary,
 }));
 
-const MyList = styled(List)((props: { type: string; theme: Theme }) => ({
-	color: props.theme.palette.text.primary,
-	display: props.type === "row" ? "flex" : "block",
+const MyList = styled(List)(({ theme }: { theme: Theme }) => ({
+	color: theme.palette.text.primary,
+	display: "flex",
 	flexGrow: 3,
 	justifyContent: "center",
 	alignItems: "center",

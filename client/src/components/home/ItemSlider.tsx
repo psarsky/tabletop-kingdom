@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Slide } from "@mui/material";
 import { NavigateNext, NavigateBefore } from "@mui/icons-material";
 
-
 import {
 	ItemSliderContainer,
 	MessageText,
@@ -13,7 +12,7 @@ import {
 import { IconBtn } from "../../styles/layout/HeaderStyle";
 import { ProductInterface } from "../../util/interfaces";
 import useFetchFromServer from "../../hooks/useFetchFromServer";
-import ProductSliderCard from "../products/ProductSliderCard";
+import ProductCard from "../products/ProductCard";
 
 function ItemSlider(): JSX.Element {
 	const [productIndex, setProductIndex] = useState<number>(0);
@@ -27,7 +26,6 @@ function ItemSlider(): JSX.Element {
 			let random: ProductInterface[] = data.sort(() => 0.5 - Math.random()).slice(0, 5);
 			setProducts(random);
 		},
-		dependencies: [],
 	});
 
 	const handleNext = () => {
@@ -63,7 +61,7 @@ function ItemSlider(): JSX.Element {
 							{" "}
 							{/* Do not change, literally NOTHING ELSE WORKS */}
 							{products.length > 0 ? (
-								<ProductSliderCard product={products[productIndex]} />
+								<ProductCard product={products[productIndex]} />
 							) : (
 								<MessageText>Loading...</MessageText>
 							)}

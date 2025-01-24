@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { FetchProps } from "../util/interfaces";
 
 function useFetchFromServer<T>(props: FetchProps<T>): void {
-	const { url, dependencies = [], onFetch, timeout = 0 } = props;
+    const { url, dependencies = [], onFetch, timeout = 0 } = props;
+    console.log("Fetching data from:", url);
 
 	useEffect(() => {
 		const fetchFromServer = async (): Promise<void> => {

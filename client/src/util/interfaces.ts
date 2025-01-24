@@ -46,6 +46,13 @@ export interface UserInterface {
 	role: "user" | "admin";
 }
 
+export interface FetchProps<T> {
+	url: string;
+	dependencies?: React.DependencyList;
+	onFetch?: (data: T) => void;
+	timeout?: number;
+}
+
 export interface UIContextType {
 	drawerOpen: boolean;
 	setDrawerOpen: (open: boolean) => void;
@@ -53,9 +60,7 @@ export interface UIContextType {
 	setShowSearchBox: (open: boolean) => void;
 }
 
-export interface FetchProps<T> {
-	url: string;
-	dependencies?: React.DependencyList;
-	onFetch?: (data: T) => void;
-	timeout?: number;
+export interface ProductSearchContextType {
+	query: string[];
+	setQuery: (query: string[]) => void;
 }

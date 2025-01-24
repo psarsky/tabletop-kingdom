@@ -24,11 +24,14 @@ const SliderTitle = styled(Typography)(({ theme }: { theme: Theme }) => ({
 	lineHeight: 1.5,
 	marginBottom: "10px",
 	[theme.breakpoints.down("md")]: {
+		fontSize: "30px",
+	},
+	[theme.breakpoints.down("sm")]: {
 		fontSize: "24px",
 	},
 }));
 
-const SliderControlContainer = styled(Box)(() => ({
+const SliderControlContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
 	display: "flex",
 	justifyContent: "space-between",
 	alignItems: "center",
@@ -36,6 +39,10 @@ const SliderControlContainer = styled(Box)(() => ({
 	width: "100%",
 	height: "100%",
 	padding: "0px 20px",
+	[theme.breakpoints.down("sm")]: {
+		padding: "0px 5px",
+		gap: "5px",
+	},
 }));
 
 const SlideContainer = styled(Box)(() => ({
