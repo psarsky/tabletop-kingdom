@@ -1,6 +1,6 @@
 # Tabletop Kingdom
 
-This repository contains my project for the Introduction to Internet Applications course at AGH UST. The project implements an e-commerce application focusing on tabletop games.
+This repository contains my project for the Introduction to Internet Applications course at AGH UST. The project implements an e-commerce application focusing on tabletop games, utilizing React.js, Material UI, Express.js and SQLite.
 
 ## Table of Contents
 
@@ -11,30 +11,58 @@ This repository contains my project for the Introduction to Internet Application
 
 ## Setup instructions
 
-### Server side:
+**Make sure you have [Node.js](https://nodejs.org/en) installed and clone the repo:**
 
-1. **Install [Node.js](https://nodejs.org/en).**
-2. **Clone the repo:**
+```
+git clone https://github.com/psarsky/tabletop-kingdom.git
+cd tabletop-kingdom
+```
+
+### Client side:
+
+1. **Navigate to the `client` directory:**
     ```
-    git clone https://github.com/psarsky/tabletop-kingdom.git
-    cd tabletop-kingdom
+    cd client
     ```
-3. **Install dependencies:**
+2. **Install dependencies:**
     ```
     npm install
     ```
-4. **Configure your `.env` file:**
+3. **Start the development server:**
+    ```
+    npm run dev
+    ```
+    By default, the client will run on [`http://localhost:5173`](http://localhost:5173).
+
+### Server side:
+
+1. **Navigate to the `server` directory:**
+    ```
+    cd server
+    ```
+1. **Install dependencies:**
+    ```
+    npm install
+    ```
+1. **Configure your `.env` file:**
     ```
     PORT=3000
     TOKEN_SECRET=<<your super duper mega secret key>>
     ```
-5. **Start the server:**
+1. **Start the server:**
     ```
     npm start
     ```
     By default, the server will run on [`http://localhost:3000`](http://localhost:3000).
 
 ## Technologies and libraries
+
+### Client side:
+
+-   **[Vite](https://vitejs.dev/)**: Build tool for bundling the application.
+-   **[React.js](https://reactjs.org/)**: Library for building the user interface.
+-   **[React Router](https://reactrouter.com/)**: Library for managing navigation and routing in the application.
+-   **[Material UI](https://mui.com/)**: Component library for styling and UI elements.
 
 ### Server side:
 
@@ -48,23 +76,31 @@ This repository contains my project for the Introduction to Internet Application
 
 ## Functionality overview
 
+### Client side:
+
+-   **User interface**:
+    -   Home page displaying announcements and featured products.
+    -   Product list page with searching.
+    -   Product details page with detailed descriptions and reviews.
+-   **Shopping cart**:
+    -   Add products to the cart.
+    -   Update quantities or remove items.
+-   **Responsive design**:
+    -   Optimized for mobile, tablet, and desktop views.
+
+**More features coming as client side is still unfinished.**
+
 ### Server side:
 
 -   **User management**:
-
     -   User registration and login.
     -   Authentication using JWT tokens.
     -   Role-based access control (admin/user).
-
 -   **Product management**:
-
     -   CRUD operations for products.
-
 -   **Order processing**:
-
     -   Managing user orders and order items.
     -   Order history retrieval.
-
 -   **Reviews and ratings**:
     -   Users can leave reviews and ratings for products.
 
