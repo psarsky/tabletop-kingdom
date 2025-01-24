@@ -16,7 +16,7 @@ import {
 import { ProductInterface } from "../../util/interfaces.ts";
 import { truncateText } from "../../util/functions.ts";
 
-function ProductSliderCard(props: { product: ProductInterface }): JSX.Element {
+function ProductCard(props: { product: ProductInterface }): JSX.Element {
 	const { product } = props;
 	const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ function ProductSliderCard(props: { product: ProductInterface }): JSX.Element {
 		}
 	};
 
-	const roundedRating = Math.round(product.rating * 10) / 10;
+	const roundedRating: number | "_" = product.rating ? Math.round(product.rating * 10) / 10 : "_";
 
 	return (
 		<ProductCardContainer onClick={handleCardClick}>
@@ -35,7 +35,7 @@ function ProductSliderCard(props: { product: ProductInterface }): JSX.Element {
 				<ProductDetailsContainer>
 					<ProductName>{truncateText(product.title, 20)}</ProductName>
 					<ProductCardDividerBig orientation="horizontal" flexItem />
-					<ProductPrice>{product.price} $</ProductPrice>
+					<ProductPrice>${product.price}</ProductPrice>
 					<ProductCardDividerBig orientation="horizontal" flexItem />
 					<ProductDesctiption>{product.description}</ProductDesctiption>
 					<ProductCardDividerBig orientation="horizontal" flexItem />
@@ -55,4 +55,4 @@ function ProductSliderCard(props: { product: ProductInterface }): JSX.Element {
 	);
 }
 
-export default ProductSliderCard;
+export default ProductCard;

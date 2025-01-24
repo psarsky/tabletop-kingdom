@@ -29,10 +29,6 @@ function DrawerMenu(): JSX.Element {
 						Products
 					</DrawerButton>
 					<DrawerDivider variant="middle" />
-					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/categories">
-						Categories
-					</DrawerButton>
-					<DrawerDivider variant="middle" />
 					<DrawerButton onClick={() => setDrawerOpen(false)} component={Link} to="/user">
 						Account
 					</DrawerButton>

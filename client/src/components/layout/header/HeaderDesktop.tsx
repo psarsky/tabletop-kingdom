@@ -22,10 +22,7 @@ function HeaderDesktop(props: { matches: boolean }): JSX.Element {
 				</Title>
 			</MenuButton>
 			<MenuButton component={Link} to="/products">
-				Products
-			</MenuButton>
-			<MenuButton component={Link} to="/categories">
-				Categories
+				See all products
 			</MenuButton>
 			<MenuButton2 onClick={() => setShowSearchBox(true)}>
 				<Search />

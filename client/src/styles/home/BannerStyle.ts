@@ -11,9 +11,13 @@ const BannerContainer = styled(Box)(({ theme }: { theme: Theme }) => ({
 	padding: "30px 30px",
 	margin: "30px 0px",
 	borderRadius: "10px",
-	[theme.breakpoints.down("sm")]: {
+	[theme.breakpoints.down("md")]: {
+		maxHeight: "360px",
+	},
+	"@media (max-width: 750px)": {
 		flexDirection: "column",
 		alignItems: "center",
+		maxHeight: "100%",
 	},
 }));
 
