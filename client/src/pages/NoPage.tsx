@@ -1,22 +1,11 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Link, Typography } from "@mui/material";
 
 import theme from "../util/theme";
+import { ContentFill } from "../styles/layout/ContentContainer";
 
 function NoPage(): JSX.Element {
 	return (
-		<Box
-			sx={{
-				background: (theme) => theme.palette.background.default,
-				color: (theme) => theme.palette.primary.main,
-				display: "flex",
-				flexDirection: "column",
-				justifyContent: "center",
-				alignItems: "center",
-				textAlign: "center",
-				gap: "3rem",
-				height: "100vh",
-			}}
-		>
+		<ContentFill>
 			<Typography
 				variant="h1"
 				sx={{ color: theme.palette.secondary.main, textAlign: "center" }}
@@ -46,7 +35,7 @@ function NoPage(): JSX.Element {
 					Take me back to a safer place.
 				</Link>
 			</Typography>
-		</Box>
+		</ContentFill>
 	);
 }
 

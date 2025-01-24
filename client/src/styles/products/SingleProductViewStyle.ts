@@ -8,66 +8,68 @@ import {
 	styled,
 	Typography,
 	Theme,
+	Container,
+    FormControl,
+    FormControlProps
 } from "@mui/material";
 
-const ProductContainer = styled(Card)(({ theme }: { theme: Theme }) => ({
-	backgroundColor: theme.palette.primary.main,
+const centeredFlex = {
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+};
+
+const ProductContainer = styled(Container)(({ theme }: { theme: Theme }) => ({
+	backgroundColor: theme.palette.background.default,
 	color: theme.palette.text.primary,
 	display: "flex",
 	flexDirection: "column",
-	width: "800px",
-	height: "600px",
 	margin: "30px",
-	cursor: "pointer",
-	boxShadow: "0 0 6px rgba(0,0,0,0.22)",
-	borderRadius: "10px",
 }));
 
-const ProductContent = styled(Box)(() => ({
-	display: "flex",
-	flexDirection: "row",
-	gap: "10px",
-	margin: 0,
-	padding: 0,
+const ProductContent = styled(Card)(({ theme }: { theme: Theme }) => ({
+	background: theme.palette.background.default,
+	...centeredFlex,
+	flexDirection: "column",
+	gap: "30px",
+	boxShadow: "0 0 0 rgb(0,0,0)",
 }));
 
 const ProductImage = styled(CardMedia)(() => ({
 	backgroundColor: "white",
 	width: "500px",
 	height: "500px",
+	borderRadius: "10px",
 }));
 
 const ProductDetailsContainer = styled(CardContent)(() => ({
-	display: "flex",
-	justifyContent: "center",
-	alignItems: "center",
+	...centeredFlex,
 	flexDirection: "column",
-	gap: "10px",
-	height: "500px",
-	width: "300px",
-	overflow: "hidden",
+	gap: "30px",
 }));
 
 const ProductName = styled(Typography)(() => ({
 	fontSize: "2rem",
-	alignSelf: "flex-start",
-	justifySelf: "center",
 }));
 
 const ProductPrice = styled(Typography)(() => ({
 	textWrap: "nowrap",
 	fontWeight: "bold",
 	fontSize: "3rem",
-	alignSelf: "flex-end",
 }));
 
 const ProductDesctiption = styled(Typography)(() => ({}));
 
-const StockRatingContainer = styled(Box)(() => ({
+const JustifiedContainer = styled(Box)(() => ({
 	display: "flex",
 	justifyContent: "space-between",
 	alignItems: "center",
 	width: "100%",
+}));
+
+const CenteredContainer = styled(Box)(() => ({
+    ...centeredFlex,
+    gap: "20px",
 }));
 
 const ProductDivider = styled(Divider)(({ theme }: { theme: Theme }) => ({
@@ -76,9 +78,42 @@ const ProductDivider = styled(Divider)(({ theme }: { theme: Theme }) => ({
 
 const CartButton = styled(Button)(({ theme }: { theme: Theme }) => ({
 	color: theme.palette.text.primary,
-	height: "100px",
+	height: "60px",
 	fontSize: "1.5rem",
 	fontWeight: "bold",
+}));
+
+const ReviewContainer = styled(Box)(() => ({
+	...centeredFlex,
+	flexDirection: "column",
+	gap: "30px",
+}));
+
+const ReviewList = styled(Box)(() => ({
+	...centeredFlex,
+	flexDirection: "column",
+	gap: "10px",
+	minWidth: "800px",
+}));
+
+const ReviewItem = styled(Card)(({ theme }: { theme: Theme }) => ({
+	background: theme.palette.secondary.main,
+	margin: "10px 0",
+	width: "100%",
+}));
+
+const ReviewForm = styled(FormControl)<FormControlProps>(() => ({
+    marginTop: "20px",
+    width: "100%",
+    maxWidth: "800px"
+}))
+
+const ReviewSubmitButton = styled(Button)(({ theme }: { theme: Theme }) => ({
+    color: theme.palette.text.primary, marginTop: "10px" 
+}))
+
+const MessageText = styled(Typography)(({ theme }: { theme: Theme }) => ({
+	color: theme.palette.text.primary,
 }));
 
 export {
@@ -91,5 +126,12 @@ export {
 	ProductDesctiption,
 	ProductDivider,
 	CartButton,
-	StockRatingContainer,
+    JustifiedContainer,
+    CenteredContainer,
+	ReviewContainer,
+	ReviewList,
+    ReviewItem,
+    ReviewForm,
+    ReviewSubmitButton,
+    MessageText
 };

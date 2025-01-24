@@ -1,67 +1,50 @@
+/**
+ * todo:
+ * typing, style
+ */
+
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Params, useParams } from "react-router-dom";
+import { Typography, TextField, CardContent, Rating } from "@mui/material";
 
-import {
-	Container,
-	Grid2,
-	Typography,
-	Button,
-	TextField,
-	Card,
-	CardMedia,
-	CardContent,
-	CardActions,
-	Rating,
-	Alert,
-	useTheme,
-} from "@mui/material";
 import fetchFromServer from "../../hooks/fetchFromServer";
-import { ProductInterface, ReviewInterface } from "../../util/interfaces";
+import { OrderItemInterface, ProductInterface, ReviewInterface } from "../../util/interfaces";
+import { ContentContainer, ContentFill } from "../../styles/layout/ContentContainer";
+import {
+	ProductContainer,
+	ProductContent,
+	ProductDetailsContainer,
+	ProductImage,
+	ProductName,
+	ProductPrice,
+	ProductDesctiption,
+	JustifiedContainer,
+	CartButton,
+	ProductDivider,
+	ReviewContainer,
+	ReviewList,
+	ReviewItem,
+	MessageText,
+	CenteredContainer,
+	ReviewForm,
+	ReviewSubmitButton,
+} from "../../styles/products/SingleProductViewStyle";
 
-const addReview = async (productId: string, reviewContent: string): Promise<void> => {
-	const response = await fetch(`http://localhost:3000/products/id/${productId}/reviews`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ content: reviewContent }),
-	});
-
-	if (!response.ok) {
-		throw new Error(response.statusText);
-	}
-};
-
-const addToCart = (productId: string): void => {
-	const cart = JSON.parse(localStorage.getItem("cart") || "[]") as {
-		id: string;
-		quantity: number;
-	}[];
-
-	const existingItem = cart.find((item) => item.id === productId);
-
-	if (existingItem) {
-		existingItem.quantity += 1;
-	} else {
-		cart.push({ id: productId, quantity: 1 });
-	}
-
-	localStorage.setItem("cart", JSON.stringify(cart));
-};
-
-const ProductDetails: React.FC = () => {
-	const theme = useTheme();
+function SingleProductView(): JSX.Element {
 	const { id } = useParams<{ id: string }>();
-	const [product, setProduct] = useState<ProductInterface | null>(null);
-	const [reviews, setReviews] = useState<ReviewInterface[] | []>([]);
-	const [review, setReview] = useState("");
-	const [error, setError] = useState("");
-	const params = useParams();
+	const [product, setProduct] = useState<ProductInterface>();
+	const [reviews, setReviews] = useState<ReviewInterface[]>([]);
+	const [review, setReview] = useState<string>("");
+	const [userRating, setRating] = useState<number>(0);
+	const [noItemsMessage, setNoItemsMessage] = useState<string>("Loading...");
+	const [noReviewsMessage, setNoReviewsMessage] = useState<string>("Loading...");
+	const params: Readonly<Params<string>> = useParams();
 
 	fetchFromServer({
 		url: `http://localhost:3000/products/id/${params.id}`,
 		onFetch: (data: ProductInterface) => {
 			setProduct(data);
+			setNoItemsMessage("Item not found.");
 		},
 		timeout: 1000,
 	});
@@ -69,115 +52,162 @@ const ProductDetails: React.FC = () => {
 	fetchFromServer({
 		url: `http://localhost:3000/products/id/${params.id}/reviews`,
 		onFetch: (data: ReviewInterface[]) => {
-			setReviews(data);
+			setReviews(Array.isArray(data) ? data : []);
+			setNoReviewsMessage("No reviews found.");
 		},
 		timeout: 1000,
 	});
 
-	const handleAddToCart = () => {
-		try {
-			addToCart(id!);
-			alert("Product added to cart!");
-		} catch (error) {
-			setError("Error adding product to cart.");
+	const addReview = async (reviewContent: string, rating: number): Promise<void> => {
+		const response = await fetch(`http://localhost:3000/products/id/${id}/reviews`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ content: reviewContent, rating }),
+		});
+
+		if (!response.ok) {
+			setReview("");
+			setRating(0);
+			throw new Error(response.statusText);
 		}
 	};
+
+	const addToCart = (): void => {
+		const cart = JSON.parse(localStorage.getItem("cart") || "[]") as OrderItemInterface[];
+
+		const existingItem = cart.find(
+			(item: OrderItemInterface) => item.productId === parseInt(id!)
+		);
+
+		if (existingItem) {
+			existingItem.quantity += 1;
+		} else {
+			cart.push({ productId: parseInt(id!), quantity: 1, price: product!.price });
+		}
+
+		localStorage.setItem("cart", JSON.stringify(cart));
+	};
+
+	const handleAddToCart = () => {
+		try {
+			addToCart();
+			alert("Product added to cart!");
+		} catch (error: any) {
+			alert("Error adding product to cart.");
+		}
+	};
+
+	const handleReviewTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		setReview(e.target.value);
+
+	const handleRatingChange = (_: React.SyntheticEvent<Element, Event>, newValue: number | null) =>
+		setRating(newValue || 0);
 
 	const handleReviewSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (review.trim()) {
-			addReview(id!, review)
+			addReview(review, userRating)
 				.then(() => {
 					setReview("");
+					setRating(0);
 					alert("Review submitted!");
 				})
-				.catch((error) => setError("Error submitting review: " + error.message));
+				.catch((error: any) => alert("Error submitting review: " + error.message));
 		} else {
-			setError("Review cannot be empty.");
+			setRating(0);
+			alert("Review cannot be empty.");
 		}
 	};
 
-	if (error) return <Alert severity="error">{error}</Alert>;
-
-	if (!product) return null;
+	if (!product)
+		return (
+			<ContentFill>
+				<Typography variant="h2">{noItemsMessage}</Typography>
+			</ContentFill>
+		);
 
 	const { title, thumbnail, price, description, stock, rating } = product;
 
+	const reviewList = reviews.map((review: ReviewInterface) => (
+		<ReviewItem key={review.id}>
+			<CardContent>
+				<Rating value={review.rating} readOnly precision={0.5} />
+				<Typography variant="body1">{review.comment}</Typography>
+				<Typography variant="caption">- {review.name}</Typography>
+			</CardContent>
+		</ReviewItem>
+	));
+
+	const roundedRating: number | "_" = product.rating ? Math.round(product.rating * 10) / 10 : "_";
+
 	return (
-		<Container>
-			<Grid2 container spacing={4}>
-				<Grid2>
-					<Card>
-						<CardMedia
-							component="img"
-							image={thumbnail}
-							alt={title}
-							sx={{ height: "500px", width: "500px" }}
-						/>
-					</Card>
-				</Grid2>
-				<Grid2>
-					<Typography variant="h4">{title}</Typography>
-					<Typography variant="h6" color="textSecondary">
-						${price.toFixed(2)}
-					</Typography>
-					<Typography variant="body1" paragraph>
-						{description}
-					</Typography>
-					<Typography variant="body2" color="textSecondary">
-						In stock: {stock}
-					</Typography>
-					<Rating value={rating} readOnly precision={0.5} />
-					<CardActions>
-						<Button variant="contained" color="primary" onClick={handleAddToCart}>
-							Add to Cart
-						</Button>
-					</CardActions>
-				</Grid2>
-			</Grid2>
-
-			<Typography variant="h5" marginTop={4}>
-				Reviews
-			</Typography>
-			{Array.isArray(reviews) &&
-				reviews.map((rev) => (
-					<Card
-						key={rev.id}
-						sx={{ bgcolor: theme.palette.secondary.main, margin: "10px 0" }}
-					>
-						<CardContent>
-							<Typography variant="body1">{rev.comment}</Typography>
-							<Typography
-								variant="caption"
-								sx={{ bgcolor: theme.palette.secondary.main }}
+		<ProductContainer>
+			<ProductContent>
+				<ProductImage image={thumbnail} />
+				<ProductDetailsContainer>
+					<JustifiedContainer>
+						<ProductName>{title}</ProductName>
+						<ProductPrice>${price.toFixed(2)}</ProductPrice>
+					</JustifiedContainer>
+					<ProductDivider orientation="horizontal" flexItem />
+					<ProductDesctiption>{description}</ProductDesctiption>
+					<ProductDivider orientation="horizontal" flexItem />
+					<JustifiedContainer>
+						<CenteredContainer>
+							<Rating value={rating} readOnly precision={0.5} />
+							<ProductDesctiption>{roundedRating} / 5</ProductDesctiption>
+						</CenteredContainer>
+						<CenteredContainer>
+							<ProductDesctiption>In stock: {stock}</ProductDesctiption>
+							<CartButton
+								variant="contained"
+								color="primary"
+								disabled={product.stock <= 0}
+								onClick={handleAddToCart}
 							>
-								- {rev.name}
-							</Typography>
-						</CardContent>
-					</Card>
-				))}
-
-			<form onSubmit={handleReviewSubmit} style={{ marginTop: "20px" }}>
-				<TextField
-					label="Add a Review"
-					variant="outlined"
-					fullWidth
-					value={review}
-					onChange={(e) => setReview(e.target.value)}
-					multiline
-					rows={3}
-				/>
-				<Button
-					type="submit"
-					variant="contained"
-					color="secondary"
-					style={{ marginTop: "10px" }}
-				>
-					Submit Review
-				</Button>
-			</form>
-		</Container>
+								Add to cart
+							</CartButton>
+						</CenteredContainer>
+					</JustifiedContainer>
+				</ProductDetailsContainer>
+			</ProductContent>
+			<ReviewContainer>
+				<ProductName>Reviews</ProductName>
+				<ReviewList>
+					{reviews.length > 0 ? (
+						reviewList
+					) : (
+						<ContentContainer>
+							<MessageText sx={{ mb: "20px" }}>{noReviewsMessage}</MessageText>
+						</ContentContainer>
+					)}
+				</ReviewList>
+				<ReviewForm component="form" onSubmit={handleReviewSubmit}>
+					<Rating
+						value={userRating}
+						onChange={handleRatingChange}
+						precision={0.5}
+						size="large"
+						style={{ marginBottom: "10px" }}
+					/>
+					<TextField
+						label="Add a Review"
+						variant="outlined"
+						fullWidth
+						value={review}
+						onChange={handleReviewTextChange}
+						multiline
+						rows={3}
+					/>
+					<ReviewSubmitButton type="submit" variant="contained" color="secondary">
+						Submit Review
+					</ReviewSubmitButton>
+				</ReviewForm>
+			</ReviewContainer>
+		</ProductContainer>
 	);
-};
+}
 
-export default ProductDetails;
+export default SingleProductView;
