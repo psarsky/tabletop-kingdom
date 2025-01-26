@@ -14,7 +14,7 @@ import {
 	StockRatingContainer,
 } from "../../styles/products/ProductCardStyle.ts";
 import { ProductInterface } from "../../util/interfaces.ts";
-import { truncateText } from "../../util/functions.ts";
+import { truncateText, addToCart } from "../../util/functions.ts";
 
 function ProductCard(props: { product: ProductInterface }): JSX.Element {
 	const { product } = props;
@@ -23,6 +23,16 @@ function ProductCard(props: { product: ProductInterface }): JSX.Element {
 	const handleCardClick = () => {
 		if (product) {
 			navigate(`/products/id/${product.id}`);
+		}
+	};
+
+    const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation();
+		try {
+			addToCart(product.id!, product!.price);
+			alert("Product added to cart!");
+		} catch (error: any) {
+			alert("Error adding product to cart.");
 		}
 	};
 
@@ -48,7 +58,12 @@ function ProductCard(props: { product: ProductInterface }): JSX.Element {
 				</ProductDetailsContainer>
 			</ProductCardContent>
 			<ProductCardDivider />
-			<CartButton variant="contained" color="primary" disabled={product.stock <= 0}>
+			<CartButton
+				variant="contained"
+				color="primary"
+				disabled={product.stock <= 0}
+				onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => handleAddToCart(e)}
+			>
 				Add to cart
 			</CartButton>
 		</ProductCardContainer>

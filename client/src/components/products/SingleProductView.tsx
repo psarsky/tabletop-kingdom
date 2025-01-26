@@ -1,14 +1,9 @@
-/**
- * todo:
- * typing, style
- */
-
 import React, { useState } from "react";
 import { Params, useParams } from "react-router-dom";
 import { Typography, TextField, CardContent, Rating } from "@mui/material";
 
 import fetchFromServer from "../../hooks/fetchFromServer";
-import { OrderItemInterface, ProductInterface, ReviewInterface } from "../../util/interfaces";
+import { ProductInterface, ReviewInterface } from "../../util/interfaces";
 import { ContentContainer, ContentFill } from "../../styles/layout/ContentContainer";
 import {
 	ProductContainer,
@@ -29,7 +24,11 @@ import {
 	ReviewForm,
 	ReviewSubmitButton,
 } from "../../styles/products/SingleProductViewStyle";
+import { addReview, addToCart } from "../../util/functions";
 
+/**
+ * @todo Add mobile view
+ */
 function SingleProductView(): JSX.Element {
 	const { id } = useParams<{ id: string }>();
 	const [product, setProduct] = useState<ProductInterface>();
@@ -58,41 +57,9 @@ function SingleProductView(): JSX.Element {
 		timeout: 1000,
 	});
 
-	const addReview = async (reviewContent: string, rating: number): Promise<void> => {
-		const response = await fetch(`http://localhost:3000/products/id/${id}/reviews`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ content: reviewContent, rating }),
-		});
-
-		if (!response.ok) {
-			setReview("");
-			setRating(0);
-			throw new Error(response.statusText);
-		}
-	};
-
-	const addToCart = (): void => {
-		const cart = JSON.parse(localStorage.getItem("cart") || "[]") as OrderItemInterface[];
-
-		const existingItem = cart.find(
-			(item: OrderItemInterface) => item.productId === parseInt(id!)
-		);
-
-		if (existingItem) {
-			existingItem.quantity += 1;
-		} else {
-			cart.push({ productId: parseInt(id!), quantity: 1, price: product!.price });
-		}
-
-		localStorage.setItem("cart", JSON.stringify(cart));
-	};
-
 	const handleAddToCart = () => {
 		try {
-			addToCart();
+			addToCart(parseInt(id!), product!.price);
 			alert("Product added to cart!");
 		} catch (error: any) {
 			alert("Error adding product to cart.");
@@ -108,14 +75,15 @@ function SingleProductView(): JSX.Element {
 	const handleReviewSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (review.trim()) {
-			addReview(review, userRating)
+			addReview(id!, review, userRating)
 				.then(() => {
 					setReview("");
 					setRating(0);
 					alert("Review submitted!");
 				})
 				.catch((error: any) => alert("Error submitting review: " + error.message));
-		} else {
+        } else {
+            setReview("");
 			setRating(0);
 			alert("Review cannot be empty.");
 		}
